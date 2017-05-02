@@ -33,18 +33,18 @@ class Farmland:
 
 	def assetbalances(self):
 		assetbalances = self.mchain.gettotalbalances()
-		message = {"op-return":assetbalances}	
+		message = {"op_return":assetbalances}	
 		publish_handler({"node":"farmland","messagecode":"assetbalance","messagetype":"resp","message":message})
 
 	
 	def queryassettranx(self,asset):
 		assettranx = self.mchain.queryAssetTransactions(asset)
-		message = {"op-return":assettranx}	
+		message = {"op_return":assettranx}	
 		publish_handler({"node":"farmland","messagecode":"assettranx","messagetype":"resp","message":message})
 
 	def queryasstdetails(self,asset):
 		assetdetails = self.mchain.queryassetsdetails(asset)
-		message = {"op-return":assetdetails}	
+		message = {"op_return":assetdetails}	
 		publish_handler({"node":"farmland","messagecode":"assetdetails","messagetype":"resp","message":message})
 
 	def issueFSasset(self): 
@@ -61,12 +61,12 @@ class Farmland:
 		    self.assetsubscribe(assetname)
 		    
 		    assetdescription = {"assetname":assetname,"assetquantity":assetquantity,"assetmetrics":"kgs"}
-		    message = {"op-return":issueFSasset_return,"assetdescription":assetdescription}
+		    message = {"op_return":issueFSasset_return,"assetdescription":assetdescription}
 
 		    publish_handler({"node":"farmland","messagecode":"issueasset","messagetype":"resp","message":message})
 		except Exception as e:
 		    print e,"erro in issueFSasset"
-		    message = {"op-return":"error","message":e}
+		    message = {"op_return":"error","message":e}
 		    publish_handler({"node":"farmland","messagecode":"issueasset","messagetype":"resp","message":message})
 
 	
@@ -82,7 +82,7 @@ class Farmland:
 			if prepare_return != False:
 				createex_return = self.mchain.createrawExchange(prepare_return["txid"],prepare_return["vout"],otherasset)
 				print createex_return				
-				message = {"op-return":str(createex_return),"hexblob":str(createex_return)}
+				message = {"op_return":str(createex_return),"hexblob":str(createex_return)}
 				publish_handler({"node":"farmland","messagecode":"createexchange","messagetype":"resp","message":message})
 			else:
 				publish_handler({"node":"farmland","messagecode":"createexchange","messagetype":"resp","message":""})   

@@ -35,17 +35,17 @@ class Retailstore:
 
     def assetbalances(self):
         assetbalances = self.mchain.gettotalbalances()
-        message = {"op-return":assetbalances}   
+        message = {"op_return":assetbalances}   
         publish_handler({"node":"retailstore","messagecode":"assetbalance","messagetype":"resp","message":message})
 
     def queryassettranx(self,asset):
         assettranx = self.mchain.queryAssetTransactions(asset)
-        message = {"op-return":assettranx}  
+        message = {"op_return":assettranx}  
         publish_handler({"node":"retailstore","messagecode":"assettranx","messagetype":"resp","message":message})
 
     def queryasstdetails(self,asset):
         assetdetails = self.mchain.queryassetsdetails(asset)
-        message = {"op-return":assetdetails}    
+        message = {"op_return":assetdetails}    
         publish_handler({"node":"retailstore","messagecode":"assetdetails","messagetype":"resp","message":message})
     
     
@@ -61,7 +61,7 @@ class Retailstore:
             issueRSasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
             assetdescription = {"assetname":assetname,"assetquantity":assetquantity,"assetmetrics":"dollars"}
             
-            message = {"op-return":issueRSasset_return,"assetdescription":assetdescription}
+            message = {"op_return":issueRSasset_return,"assetdescription":assetdescription}
             
             self.assetsubscribe(assetname)
             publish_handler({"node":"retailstore","messagecode":"issueasset","messagetype":"resp","message":message})
@@ -69,7 +69,7 @@ class Retailstore:
 
         except Exception as e:
             print e,"error in issueHWasset"
-            message = {"op-return":"error","message":e}
+            message = {"op_return":"error","message":e}
             publish_handler({"node":"retailstore","messagecode":"issueasset","messagetype":"resp","message":message})
 
     

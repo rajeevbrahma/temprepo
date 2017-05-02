@@ -34,17 +34,17 @@ class Warehouse:
 
     def assetbalances(self):
         assetbalances = self.mchain.gettotalbalances()
-        message = {"op-return":assetbalances}   
+        message = {"op_return":assetbalances}   
         publish_handler({"node":"warehouse","messagecode":"assetbalance","messagetype":"resp","message":message})
 	return assetbalances
     def queryassettranx(self,asset):
         assettranx = self.mchain.queryAssetTransactions(asset)
-        message = {"op-return":assettranx}  
+        message = {"op_return":assettranx}  
         publish_handler({"node":"warehouse","messagecode":"assettranx","messagetype":"resp","message":message})
 
     def queryassetdetails(self,assetname):
         assetdetails = self.mchain.queryassetsdetails(assetname)
-        message = {"op-return":assetdetails}    
+        message = {"op_return":assetdetails}    
         publish_handler({"node":"warehouse","messagecode":"assetdetails","messagetype":"resp","message":message})
 	return assetdetails
     def getburnaddress(self):
@@ -67,7 +67,7 @@ class Warehouse:
             issueWHasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
             assetdescription = {"assetname":self.assetname,"assetquantity":assetquantity,"assetmetrics":"dollars"}
             
-            message = {"op-return":issueWHasset_return,"assetdescription":assetdescription}
+            message = {"op_return":issueWHasset_return,"assetdescription":assetdescription}
             
             self.assetsubscribe(self.assetname)
             publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})
@@ -75,7 +75,7 @@ class Warehouse:
 
         except Exception as e:
             print e,"error in issueHWasset"
-            message = {"op-return":"error","message":e}
+            message = {"op_return":"error","message":e}
             publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})
 
     
@@ -89,7 +89,7 @@ class Warehouse:
             if prepare_return != False:
                 createex_return = self.mchain.createrawExchange(prepare_return["txid"],prepare_return["vout"],otherasset)
                 print createex_return
-                message = {"op-return":str(createex_return),"hexblob":str(createex_return)}
+                message = {"op_return":str(createex_return),"hexblob":str(createex_return)}
                 publish_handler({"node":"warehouse","messagecode":"createexchange","messagetype":"resp","message":message})
             else:
                 publish_handler({"node":"warehouse","messagecode":"createexchange","messagetype":"resp","message":""})   
@@ -148,7 +148,7 @@ class Warehouse:
                     self.convertasset_qty = assetbalances[i]["qty"]
                 else:
                     
-                    message = {"op-return":False,"assetdescription":False,"burnasset-op-return":False}
+                    message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
             print assetbalances
 	    print self.convertasset_name
             # step 2 get details of the asset
@@ -167,24 +167,24 @@ class Warehouse:
                     issueWHasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
                     assetdescription = {"assetname":convertedasset_name,"assetquantity":assetquantity,"assetmetrics":"dollars"}
                     
-                    message = {"op-return":issueWHasset_return,"assetdescription":assetdescription}
+                    message = {"op_return":issueWHasset_return,"assetdescription":assetdescription}
                     print message
                     self.assetsubscribe(convertedasset_name)
                     # publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
                 else:
-                    message = {"op-return":False,"assetdescription":False,"burnasset-op-return":False}
+                    message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
                     
             else:
-                message = {"op-return":False,"assetdescription":False,"burnasset-op-return":False}
+                message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
                     
-            if message["op-return"] !=False:    
+            if message["op_return"] !=False:    
                 # step 3 send the asset to the burn address
                 burnaddress = self.getburnaddress()
                 if burnaddress != False:
                     burnasset_return = self.burnasset(burnaddress,self.convertasset_name,self.convertasset_qty)
-                    message.update({"burnasset-op-return":burnasset_return})
+                    message.update({"burnasset_op_return":burnasset_return})
                 else:
-                    message.update({"burnasset-op-return":burnasset_return})
+                    message.update({"burnasset_op_return":burnasset_return})
             
             publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})
 
