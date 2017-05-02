@@ -68,10 +68,10 @@ def main():
 		elif(inpt == "5"):	
 			publish_handler(warechannel,{"messagetype":"req","messagecode":"decodeexchange","hexblob":hexblob})
 		
-		# elif(inpt == "6"):
-		# 	publish_handler(farmchannel,{"messagetype":"req","messagecode":"createexchange","ownasset":{"crop":20},"otherasset":{"retailmoney":20}})
-		# elif(inpt == "7"):	
-		# 	publish_handler(warechannel,{"messagetype":"req","messagecode":"decodeexchange","hexblob":hexblob,"ownasset":{"retailmoney":20},"otherasset":{"crop":20}})
+		elif(inpt == "6"):
+			publish_handler(warechannel,{"messagetype":"req","messagecode":"createexchange"})
+		elif(inpt == "7"):	
+			publish_handler(retailchannel,{"messagetype":"req","messagecode":"decodeexchange","hexblob":hexblob})
 		
 		elif(inpt == '8'):
 			publish_handler(warechannel,{"messagecode":"convertasset","messagetype":"req"})				

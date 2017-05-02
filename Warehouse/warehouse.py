@@ -57,9 +57,9 @@ class Warehouse:
         try:
             assetaddress = self.mchain.accountAddress()
             
-            self.assetname = "warehousemoney2" 
+            self.assetname = "warehousemoney" 
             assetdetails = {"name":self.assetname,"open":True}
-            assetquantity = 1000  
+            assetquantity = 100  
             assetunit = 1  
             assetnativeamount =0 
             assetcustomfield = {'currency':'dollars','owner':'John-Distributor'}
@@ -82,7 +82,7 @@ class Warehouse:
     def createExchange(self):
         try:
             # Here asset will be a dictionary ex: {"asset1":1}
-            ownasset = {"warehouse-crop3":20}
+            ownasset = {"warehouse-crop":20}
             otherasset = {"retailmoney":20}
             prepare_return = self.mchain.preparelockunspentexchange(ownasset)
 	    print prepare_return
@@ -101,8 +101,8 @@ class Warehouse:
     def decodeExchange(self,hexBlob):
         # The following will give the details regarding the exchange
         try:    
-            ownasset = {"warehousemoney2":20}
-            otherasset = {"crop2":20}
+            ownasset = {"warehousemoney":20}
+            otherasset = {"crop":20}
             
             # --step1 decode the hexblob you got in the createexchange procedure
             decodedtranx =  self.mchain.decoderawExchange(hexBlob)
@@ -141,8 +141,8 @@ class Warehouse:
             # step 1 get totalbalances
             assetbalances = self.assetbalances()
             for i in range(0,len(assetbalances)):
-                # if assetbalances[i]["name"] != self.assetname:
-                if assetbalances[i]["name"] == "crop2":
+                if assetbalances[i]["name"] != self.assetname:
+                # if assetbalances[i]["name"] == "crop":
                     self.convertasset_name = assetbalances[i]["name"]
                     self.convertasset_qty = assetbalances[i]["qty"]
                 else:

@@ -50,7 +50,7 @@ class Farmland:
 	def issueFSasset(self): 
 		try:
 		    assetaddress = self.mchain.accountAddress()
-		    assetname = "crop2"
+		    assetname = "crop"
 		    assetdetails = {"name":assetname,"open":True} # 
 		    assetquantity = 1000 # may be a fixed or random number g$
 		    assetunit = 1 # This also a random generated based on lo$
@@ -74,8 +74,8 @@ class Farmland:
 		
 		try:
 			# Here asset will be a dictionary ex: {"asset1":1}
-			ownasset = {"crop2":20}
-			otherasset = {"warehousemoney2":20}
+			ownasset = {"crop":20}
+			otherasset = {"warehousemoney":20}
 
 			prepare_return = self.mchain.preparelockunspentexchange(ownasset)
 			print prepare_return
