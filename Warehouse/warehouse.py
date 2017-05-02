@@ -82,7 +82,7 @@ class Warehouse:
     def createExchange(self):
         try:
             # Here asset will be a dictionary ex: {"asset1":1}
-            ownasset = {"warehouse-crop":20}
+            ownasset = {"warehouse-crop3":20}
             otherasset = {"retailmoney":20}
             prepare_return = self.mchain.preparelockunspentexchange(ownasset)
             if prepare_return != False:
