@@ -55,7 +55,7 @@ def publish_handler(channel,message):
 def main():
 
 	while(1):
-		inpt = raw_input("CHOOSE ONE OPTION \t\t\t\n1 create farmasset,\n2 create wareasset,\n3 create retailasset , \n4 createexchange - from Farmland,\n5 decodeexchange - in warehouse,\n6 createexchange - from warehouse \n7 decodeexchange - in retailstore \n8 issuemore  \n0 totalbalances\n\n\n\t")
+		inpt = raw_input("CHOOSE ONE OPTION \t\t\t\n1 create farmasset,\n2 create wareasset,\n3 create retailasset , \n4 createexchange - from Farmland,\n5 decodeexchange - in warehouse,\n6 createexchange - from warehouse \n7 decodeexchange - in retailstore \n8 convertasset  \n0 totalbalances\n\n\n\t")
 		if(inpt == "1"):
 			publish_handler(farmchannel,{"messagecode":"issueasset","messagetype":"req"})
 		elif(inpt == "2"):
@@ -64,22 +64,18 @@ def main():
 		elif(inpt == "3"):
 			publish_handler(retailchannel,{"messagecode":"issueasset","messagetype":"req"})	
 		elif(inpt == "4"):
-			publish_handler(farmchannel,{"messagetype":"req","messagecode":"createexchange","ownasset":{"crop":20},"otherasset":{"warehousemoney":20}})
+			publish_handler(farmchannel,{"messagetype":"req","messagecode":"createexchange"})
 		elif(inpt == "5"):	
-			publish_handler(warechannel,{"messagetype":"req","messagecode":"decodeexchange","hexblob":hexblob,"ownasset":{"warehousemoney":20},"otherasset":{"crop":20}})
+			publish_handler(warechannel,{"messagetype":"req","messagecode":"decodeexchange","hexblob":hexblob})
 		
-		elif(inpt == "6"):
-			publish_handler(farmchannel,{"messagetype":"req","messagecode":"createexchange","ownasset":{"crop":20},"otherasset":{"retailmoney":20}})
-		elif(inpt == "7"):	
-			publish_handler(warechannel,{"messagetype":"req","messagecode":"decodeexchange","hexblob":hexblob,"ownasset":{"retailmoney":20},"otherasset":{"crop":20}})
+		# elif(inpt == "6"):
+		# 	publish_handler(farmchannel,{"messagetype":"req","messagecode":"createexchange","ownasset":{"crop":20},"otherasset":{"retailmoney":20}})
+		# elif(inpt == "7"):	
+		# 	publish_handler(warechannel,{"messagetype":"req","messagecode":"decodeexchange","hexblob":hexblob,"ownasset":{"retailmoney":20},"otherasset":{"crop":20}})
+		
 		elif(inpt == '8'):
-			inpt2 = raw_input("1) crop  2) warehousemoney 3) retailmoney \n\n\t")
-			if inpt2 == "1":
-				publish_handler(warechannel,{"messagecode":"issuemoreasset","messagetype":"req","asset":"crop","assetcustomfield":{"asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"}})				
-			#if inpt2 == "2":
-				#pass
-			#if inpt2 == "3":	
-				#pass
+			publish_handler(warechannel,{"messagecode":"convertasset","messagetype":"req"})				
+			
 
 		elif(inpt == "0"):
 			inpt3 = raw_input("1) farmland  2) warehouse 3) retailstore \n\n\t")

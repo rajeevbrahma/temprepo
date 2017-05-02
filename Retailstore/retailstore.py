@@ -73,23 +73,6 @@ class Retailstore:
             publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
 
     
-    # def createExchange(self,ownasset,otherasset):
-    #     try:
-    #         # Here asset will be a dictionary ex: {"asset1":1}
-    #         ownasset = {"warehouse-crop":20}
-    #         otherasset = {"retailmoney":20}
-    #         prepare_return = self.mchain.preparelockunspentexchange(ownasset)
-    #         if prepare_return != False:
-    #             createex_return = self.mchain.createExchange(prepare_return["txid"],prepare_return["vout"],otherasset)
-    #             print createex_return
-    #             message = {"op-return":str(createex_return),"hexblob":str(createex_return)}
-    #             publish_handler({"messagecode":"createexchange","messagetype":"resp","message":message})
-    #         else:
-    #             publish_handler({"messagecode":"createexchange","messagetype":"resp","message":""})   
-    #     except Exception as e:
-    #         print e,"error in createExchange"
-    #         publish_handler({"messagecode":"createexchange","messagetype":"resp","message":""})       
-
 
     def decodeExchange(self,hexBlob):
         # The following will give the details regarding the exchange
@@ -145,15 +128,10 @@ def callback(message,channel):
         if message["messagetype"] == "req":
             if message["messagecode"] == "issueasset":
                     RS.issueRSasset()
-            # if message["messagecode"] == "createexchange":
-            #         RS.issueRSasset()
+            
             if message["messagecode"] == "decodeexchange":
                     RS.decodeExchange(message["hexblob"],message["ownasset"],message["otherasset"]) 
             
-            # if message["messagecode"] == "assettranx":
-            #         RS.queryassettranx(message["asset"])
-            # if message["messagecode"] == "assetdetails":
-            #         RS.queryasstdetails(message["asset"])
             if message["messagecode"] == "assetbalance":
                     RS.assetbalances()
 

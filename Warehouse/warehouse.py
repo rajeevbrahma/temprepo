@@ -79,26 +79,7 @@ class Warehouse:
             publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
 
     
-<<<<<<< HEAD
     def createExchange(self):
-=======
-    def issuemoreasset(self,assetname,assetcustomfield):
-        try:
-            assetaddress = self.mchain.accountAddress()
-            issuemoreasset_return = self.mchain.issueMoreAsset(assetaddress,assetname,assetcustomfield)
-            
-            assetdescription = {"assetname":assetname,"assetcustomfield":assetcustomfield}
-            message = {"op-return":issuemoreasset_return,"assetdescription":assetdescription}
-            publish_handler({"messagecode":"issuemoreasset","messagetype":"resp","message":message})
-        
-        except Exception as e:
-            print e,"issuemoreasset error"
-            message = {"op-return":"error","message":e}
-            publish_handler({"messagecode":"issuemoreasset","messagetype":"resp","message":message})
-
-
-    def createExchange(self,ownasset,otherasset):
->>>>>>> 5fcd88169f0c2d103072b21fa2ced6f137df4edd
         try:
             # Here asset will be a dictionary ex: {"asset1":1}
             ownasset = {"warehouse-crop":20}
@@ -222,11 +203,6 @@ def callback(message,channel):
         if message["messagetype"] == "req":
             if message["messagecode"] == "issueasset":
                     WH.issueWHasset()
-<<<<<<< HEAD
-=======
-            if message["messagecode"] == "issuemoreasset":
-                    WH.issuemoreasset(message["asset"],message["assetcustomfield"])
->>>>>>> 5fcd88169f0c2d103072b21fa2ced6f137df4edd
                     
             if message["messagecode"] == "createexchange":
                     WH.issueWHasset()
@@ -234,13 +210,11 @@ def callback(message,channel):
             if message["messagecode"] == "decodeexchange":
                     WH.decodeExchange(message["hexblob"],message["ownasset"],message["otherasset"]) 
             
-            # if message["messagecode"] == "assettranx":
-            #         WH.queryassettranx(message["asset"])
-            # if message["messagecode"] == "assetdetails":
-            #         WH.queryasstdetails(message["asset"])
             if message["messagecode"] == "assetbalance":
                     WH.assetbalances()
-        
+            
+            if message["messagecode"] == "convertasset":
+                    WH.convertasset()
             
     except Exception as e:
         logging.error("The callback exception is %s,%s"%(e,type(e)))           
@@ -290,53 +264,3 @@ if __name__ == '__main__':
     WH = Warehouse(rpcuser,rpcpasswd,rpchost,rpcport,chainname)
     WH.connectTochain()
     pub_Init()
-<<<<<<< HEAD
-
-
-
-'''
-[
-    {
-        "name" : "crop2",
-        "issuetxid" : "a5cfd447c5f2735856c73a907aae77846154d9d069e9dd035abeab27d81ca30e",
-        "assetref" : "39-265-53157",
-        "multiple" : 1,
-        "units" : 1.00000000,
-        "open" : true,
-        "details" : {
-            "assetmetrics" : "kgs",
-            "croptemp" : "27",
-            "crophumidity" : "10",
-            "startdate" : "2017-03-01",
-            "enddate" : "2017-04-30",
-            "asset-departuredate" : "2017-05-05",
-            "farmer" : "Mark-Farmer"
-        },
-        "issueqty" : 100.00000000,
-        "issueraw" : 100,
-        "subscribed" : false,
-        "issues" : [
-            {
-                "txid" : "a5cfd447c5f2735856c73a907aae77846154d9d069e9dd035abeab27d81ca30e",
-                "qty" : 100.00000000,
-                "raw" : 100,
-                "details" : {
-                    "assetmetrics" : "kgs",
-                    "croptemp" : "27",
-                    "crophumidity" : "10",
-                    "startdate" : "2017-03-01",
-                    "enddate" : "2017-04-30",
-                    "asset-departuredate" : "2017-05-05",
-                    "farmer" : "Mark-Farmer"
-                },
-                "issuers" : [
-                    "14VjnvFJdo19D3h5CD5xHfhpGoGdcWCpgQuYw4"
-                ]
-            }
-        ]
-    }
-]
-
-'''    
-=======
->>>>>>> 5fcd88169f0c2d103072b21fa2ced6f137df4edd
