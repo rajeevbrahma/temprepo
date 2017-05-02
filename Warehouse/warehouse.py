@@ -140,7 +140,8 @@ class Warehouse:
             # step 1 get totalbalances
             assetbalances = self.mchain.assetbalances()
             for i in range(0,len(assetbalances)):
-                if assetbalances[i]["name"] != self.assetname:
+                # if assetbalances[i]["name"] != self.assetname:
+                if assetbalances[i]["name"] == "crop2":
                     self.convertasset_name = assetbalances[i]["name"]
                     self.convertasset_qty = assetbalances[i]["qty"]
                 else:
@@ -163,7 +164,7 @@ class Warehouse:
                     assetdescription = {"assetname":convertedasset_name,"assetquantity":assetquantity,"assetmetrics":"dollars"}
                     
                     message = {"op-return":issueWHasset_return,"assetdescription":assetdescription}
-                    
+                    print message
                     self.assetsubscribe(convertedasset_name)
                     # publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
                 else:
@@ -184,6 +185,7 @@ class Warehouse:
             publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})
 
         except Exception as e:
+        	print e 
             message.update({"error":e})
             publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})            
 
