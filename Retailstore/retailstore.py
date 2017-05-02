@@ -133,7 +133,7 @@ def callback(message,channel):
                     RS.issueRSasset()
             
             if message["messagecode"] == "decodeexchange":
-                    RS.decodeExchange(message["hexblob"],message["ownasset"],message["otherasset"]) 
+                    RS.decodeExchange(message["hexblob"]) 
             
             if message["messagecode"] == "assetbalance":
                     RS.assetbalances()
