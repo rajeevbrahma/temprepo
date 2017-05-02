@@ -140,7 +140,7 @@ class Warehouse:
         try:
             # step 1 get totalbalances
             assetbalances = self.assetbalances()
-	    assetname = "warehousemoney"
+	        assetname = "warehousemoney"
             for i in range(0,len(assetbalances)):
                 if assetbalances[i]["name"] != assetname:
                 # if assetbalances[i]["name"] == "crop":
