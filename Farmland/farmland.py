@@ -34,18 +34,18 @@ class Farmland:
 	def assetbalances(self):
 		assetbalances = self.mchain.gettotalbalances()
 		message = {"op-return":assetbalances}	
-		publish_handler({"messagecode":"assetbalance","messagetype":"resp","message":message})
+		publish_handler({"node":"farmland","messagecode":"assetbalance","messagetype":"resp","message":message})
 
 	
 	def queryassettranx(self,asset):
 		assettranx = self.mchain.queryAssetTransactions(asset)
 		message = {"op-return":assettranx}	
-		publish_handler({"messagecode":"assettranx","messagetype":"resp","message":message})
+		publish_handler({"node":"farmland","messagecode":"assettranx","messagetype":"resp","message":message})
 
 	def queryasstdetails(self,asset):
 		assetdetails = self.mchain.queryassetsdetails(asset)
 		message = {"op-return":assetdetails}	
-		publish_handler({"messagecode":"assetdetails","messagetype":"resp","message":message})
+		publish_handler({"node":"farmland","messagecode":"assetdetails","messagetype":"resp","message":message})
 
 	def issueFSasset(self): 
 		try:
@@ -63,11 +63,11 @@ class Farmland:
 		    assetdescription = {"assetname":assetname,"assetquantity":assetquantity,"assetmetrics":"kgs"}
 		    message = {"op-return":issueFSasset_return,"assetdescription":assetdescription}
 
-		    publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
+		    publish_handler({"node":"farmland","messagecode":"issueasset","messagetype":"resp","message":message})
 		except Exception as e:
 		    print e,"erro in issueFSasset"
 		    message = {"op-return":"error","message":e}
-		    publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
+		    publish_handler({"node":"farmland","messagecode":"issueasset","messagetype":"resp","message":message})
 
 	
 	def createExchange(self):
@@ -83,12 +83,12 @@ class Farmland:
 				createex_return = self.mchain.createrawExchange(prepare_return["txid"],prepare_return["vout"],otherasset)
 				print createex_return				
 				message = {"op-return":str(createex_return),"hexblob":str(createex_return)}
-				publish_handler({"messagecode":"createexchange","messagetype":"resp","message":message})
+				publish_handler({"node":"farmland","messagecode":"createexchange","messagetype":"resp","message":message})
 			else:
-				publish_handler({"messagecode":"createexchange","messagetype":"resp","message":""})   
+				publish_handler({"node":"farmland","messagecode":"createexchange","messagetype":"resp","message":""})   
 		except Exception as e:
 				print e,"error in createExchange"
-				publish_handler({"messagecode":"createexchange","messagetype":"resp","message":""})       
+				publish_handler({"node":"farmland","messagecode":"createexchange","messagetype":"resp","message":""})       
 		
 def pub_Init(): 
 	global pubnub

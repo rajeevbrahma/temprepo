@@ -35,17 +35,17 @@ class Warehouse:
     def assetbalances(self):
         assetbalances = self.mchain.gettotalbalances()
         message = {"op-return":assetbalances}   
-        publish_handler({"messagecode":"assetbalance","messagetype":"resp","message":message})
+        publish_handler({"node":"warehouse","messagecode":"assetbalance","messagetype":"resp","message":message})
 
     def queryassettranx(self,asset):
         assettranx = self.mchain.queryAssetTransactions(asset)
         message = {"op-return":assettranx}  
-        publish_handler({"messagecode":"assettranx","messagetype":"resp","message":message})
+        publish_handler({"node":"warehouse","messagecode":"assettranx","messagetype":"resp","message":message})
 
     def queryasstdetails(self,asset):
         assetdetails = self.mchain.queryassetsdetails(asset)
         message = {"op-return":assetdetails}    
-        publish_handler({"messagecode":"assetdetails","messagetype":"resp","message":message})
+        publish_handler({"node":"warehouse","messagecode":"assetdetails","messagetype":"resp","message":message})
 
     def getburnaddress(self):
         return self.mchain.getburnaddress()     
@@ -70,13 +70,13 @@ class Warehouse:
             message = {"op-return":issueWHasset_return,"assetdescription":assetdescription}
             
             self.assetsubscribe(self.assetname)
-            publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
+            publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})
 
 
         except Exception as e:
             print e,"error in issueHWasset"
             message = {"op-return":"error","message":e}
-            publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
+            publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})
 
     
     def createExchange(self):
@@ -89,12 +89,12 @@ class Warehouse:
                 createex_return = self.mchain.createExchange(prepare_return["txid"],prepare_return["vout"],otherasset)
                 print createex_return
                 message = {"op-return":str(createex_return),"hexblob":str(createex_return)}
-                publish_handler({"messagecode":"createexchange","messagetype":"resp","message":message})
+                publish_handler({"node":"warehouse","messagecode":"createexchange","messagetype":"resp","message":message})
             else:
-                publish_handler({"messagecode":"createexchange","messagetype":"resp","message":""})   
+                publish_handler({"node":"warehouse","messagecode":"createexchange","messagetype":"resp","message":""})   
         except Exception as e:
             print e,"error in createExchange"
-            publish_handler({"messagecode":"createexchange","messagetype":"resp","message":""})       
+            publish_handler({"node":"warehouse","messagecode":"createexchange","messagetype":"resp","message":""})       
 
 
     def decodeExchange(self,hexBlob):
@@ -107,36 +107,39 @@ class Warehouse:
         decodedtranx =  self.mchain.decoderawExchange(hexBlob)
         if type(decodedtranx) == dict:
             if decodedtranx.has_key("offer") and decodedtranx.has_key("ask"):
-            # --step2
-            # We are locking the asset(ownasset)
-            prepare_return = self.mchain.preparelockunspentexchange(ownasset)
-            print prepare_return
-            if prepare_return != False:                
-                # --step3 
-                # Now we to do the appenexchange operation by giving hexblob and txid and otherasset 
-                append_return = self.mchain.appendrawExchange(hexBlob,prepare_return["txid"],prepare_return["vout"],otherasset)
-                print append_return
-                # -- step 6 
-                # This step is for sending the transaction details to the chain
-                if append_return["complete"] == True:
-                        send_return = self.mchain.sendrawTransaction(append_return["hex"])
-                        message = {"exchange-detials":decodedtranx,"exchange-addedtochain":send_return} 
-                        publish_handler({"messagecode":"decodeexchange","messagetype":"resp","message":message})            
+                # --step2
+                # We are locking the asset(ownasset)
+                prepare_return = self.mchain.preparelockunspentexchange(ownasset)
+                print prepare_return
+                if prepare_return != False:                
+                    # --step3 
+                    # Now we to do the appenexchange operation by giving hexblob and txid and otherasset 
+                    append_return = self.mchain.appendrawExchange(hexBlob,prepare_return["txid"],prepare_return["vout"],otherasset)
+                    print append_return
+                    # -- step 6 
+                    # This step is for sending the transaction details to the chain
+                    if append_return["complete"] == True:
+                            send_return = self.mchain.sendrawTransaction(append_return["hex"])
+                            message = {"exchange-detials":decodedtranx,"exchange-addedtochain":send_return} 
+                            publish_handler({"node":"warehouse","messagecode":"decodeexchange","messagetype":"resp","message":message})            
+                else:
+                    message = {"exchange-detials":False,"exchange-addedtochain":False} 
+                    publish_handler({"node":"warehouse","messagecode":"decodeexchange","messagetype":"resp","message":message})         
+                    
             else:
                 message = {"exchange-detials":False,"exchange-addedtochain":False} 
-                publish_handler({"messagecode":"decodeexchange","messagetype":"resp","message":message})         
-                
+                publish_handler({"node":"warehouse","messagecode":"decodeexchange","messagetype":"resp","message":message})         
         else:
             message = {"exchange-detials":False,"exchange-addedtochain":False} 
-            publish_handler({"messagecode":"decodeexchange","messagetype":"resp","message":message})         
-                            
+            publish_handler({"node":"warehouse","messagecode":"decodeexchange","messagetype":"resp","message":message})         
+                                
 
     def convertasset(self)
         try:
             # step 1 get totalbalances
             assetbalances = self.mchain.assetbalances()
             for i in range(0,len(assetbalances)):
-                if assetbalances[i]["name"] != self.assetname
+                if assetbalances[i]["name"] != self.assetname:
                     self.convertasset_name = assetbalances[i]["name"]
                     self.convertasset_qty = assetbalances[i]["qty"]
                 else:
@@ -177,11 +180,11 @@ class Warehouse:
                 else:
                     message.update({"burnasset-op-return":burnasset_return})
             
-            publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
+            publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})
 
         except Exception as e:
             message.update({"error":e})
-            publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})            
+            publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})            
 
 
 def pub_Init(): 

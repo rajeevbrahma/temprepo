@@ -36,17 +36,17 @@ class Retailstore:
     def assetbalances(self):
         assetbalances = self.mchain.gettotalbalances()
         message = {"op-return":assetbalances}   
-        publish_handler({"messagecode":"assetbalance","messagetype":"resp","message":message})
+        publish_handler({"node":"retailstore","messagecode":"assetbalance","messagetype":"resp","message":message})
 
     def queryassettranx(self,asset):
         assettranx = self.mchain.queryAssetTransactions(asset)
         message = {"op-return":assettranx}  
-        publish_handler({"messagecode":"assettranx","messagetype":"resp","message":message})
+        publish_handler({"node":"retailstore","messagecode":"assettranx","messagetype":"resp","message":message})
 
     def queryasstdetails(self,asset):
         assetdetails = self.mchain.queryassetsdetails(asset)
         message = {"op-return":assetdetails}    
-        publish_handler({"messagecode":"assetdetails","messagetype":"resp","message":message})
+        publish_handler({"node":"retailstore","messagecode":"assetdetails","messagetype":"resp","message":message})
     
     
     def issueRSasset(self): 
@@ -64,13 +64,13 @@ class Retailstore:
             message = {"op-return":issueRSasset_return,"assetdescription":assetdescription}
             
             self.assetsubscribe(assetname)
-            publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
+            publish_handler({"node":"retailstore","messagecode":"issueasset","messagetype":"resp","message":message})
 
 
         except Exception as e:
             print e,"error in issueHWasset"
             message = {"op-return":"error","message":e}
-            publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
+            publish_handler({"node":"retailstore","messagecode":"issueasset","messagetype":"resp","message":message})
 
     
 
@@ -98,14 +98,14 @@ class Retailstore:
                 if append_return["complete"] == True:
                         send_return = self.mchain.sendrawTransaction(append_return["hex"])
                         message = {"exchange-detials":decodedtranx,"exchange-addedtochain":send_return} 
-                        publish_handler({"messagecode":"decodeexchange","messagetype":"resp","message":message})            
+                        publish_handler({"node":"retailstore","messagecode":"decodeexchange","messagetype":"resp","message":message})            
             else:
                 message = {"exchange-detials":False,"exchange-addedtochain":False} 
-                publish_handler({"messagecode":"decodeexchange","messagetype":"resp","message":message})         
+                publish_handler({"node":"retailstore","messagecode":"decodeexchange","messagetype":"resp","message":message})         
                 
         else:
             message = {"exchange-detials":False,"exchange-addedtochain":False} 
-            publish_handler({"messagecode":"decodeexchange","messagetype":"resp","message":message})         
+            publish_handler({"node":"retailstore","messagecode":"decodeexchange","messagetype":"resp","message":message})         
                             
 
         
