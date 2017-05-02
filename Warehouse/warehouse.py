@@ -57,9 +57,9 @@ class Warehouse:
         try:
             assetaddress = self.mchain.accountAddress()
             
-            self.assetname = "warehousemoney" 
+            self.assetname = "warehousemoney2" 
             assetdetails = {"name":self.assetname,"open":True}
-            assetquantity = 100  
+            assetquantity = 1000  
             assetunit = 1  
             assetnativeamount =0 
             assetcustomfield = {'currency':'dollars','owner':'John-Distributor'}
@@ -100,8 +100,8 @@ class Warehouse:
     def decodeExchange(self,hexBlob):
         # The following will give the details regarding the exchange
         try:    
-            ownasset = {"warehousemoney":20}
-            otherasset = {"crop":20}
+            ownasset = {"warehousemoney2":20}
+            otherasset = {"crop2":20}
             
             # --step1 decode the hexblob you got in the createexchange procedure
             decodedtranx =  self.mchain.decoderawExchange(hexBlob)

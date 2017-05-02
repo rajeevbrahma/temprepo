@@ -36,7 +36,7 @@ def callback(message,channel):
                 if message["messagetype"] == "resp":
                 	print message
                   	if message["messagecode"] == "createexchange":
-                  		hexblob = message["hexblob"]
+                  		hexblob = message["message"]["hexblob"]
                   	
                 
         except Exception as e:
