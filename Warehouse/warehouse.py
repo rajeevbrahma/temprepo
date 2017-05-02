@@ -36,7 +36,7 @@ class Warehouse:
         assetbalances = self.mchain.gettotalbalances()
         message = {"op-return":assetbalances}   
         publish_handler({"node":"warehouse","messagecode":"assetbalance","messagetype":"resp","message":message})
-
+	return assetbalances
     def queryassettranx(self,asset):
         assettranx = self.mchain.queryAssetTransactions(asset)
         message = {"op-return":assettranx}  
@@ -51,7 +51,7 @@ class Warehouse:
         return self.mchain.getburnaddress()     
 
     def burnasset(self,address,asset_name,asset_qty):
-        return self.mchain.sendAsset(address,asset,asset_qty)
+        return self.mchain.sendAsset(address,asset_name,asset_qty)
 
     def issueWHasset(self): 
         try:
@@ -138,7 +138,7 @@ class Warehouse:
     def convertasset(self):
         try:
             # step 1 get totalbalances
-            assetbalances = self.mchain.assetbalances()
+            assetbalances = self.assetbalances()
             for i in range(0,len(assetbalances)):
                 # if assetbalances[i]["name"] != self.assetname:
                 if assetbalances[i]["name"] == "crop2":
@@ -152,12 +152,12 @@ class Warehouse:
             convertasset_details = self.mchain.queryassetsdetails(self.convertasset_name)
             if len(convertasset_details) != 0:
                 if convertasset_details[0].has_key("details"):
-                    convertedasset_name = "warehouse-crop"
+                    convertedasset_name = "warehouse-crop3"
                     assetdetails = {"name":convertedasset_name,"open":True} 
                     assetquantity = int(self.convertasset_qty) 
                     assetunit = 1 
-                    assetnativeamount = 0 
-                    
+                    assetnativeamount = 0
+		    assetaddress = self.mchain.accountAddress()
                     assetcustomfield = {"asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"}# will be generated based on sensor data, fields will be decided$
                     assetcustomfield.update(convertasset_details[0]["details"]) 
                     issueWHasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
@@ -175,9 +175,9 @@ class Warehouse:
                     
             if message["op-return"] !=False:    
                 # step 3 send the asset to the burn address
-                burnaddress = self.mchain.burnaddress()
+                burnaddress = self.getburnaddress()
                 if burnaddress != False:
-                    burnasset_return = self.mchain.burnasset(burnaddress,self.convertasset_name,self.convertasset_qty)
+                    burnasset_return = self.burnasset(burnaddress,self.convertasset_name,self.convertasset_qty)
                     message.update({"burnasset-op-return":burnasset_return})
                 else:
                     message.update({"burnasset-op-return":burnasset_return})
@@ -185,7 +185,7 @@ class Warehouse:
             publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})
 
         except Exception as e:
-        	print e 
+            print e 
             message.update({"error":e})
             publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})            
 
