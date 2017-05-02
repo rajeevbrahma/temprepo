@@ -97,17 +97,17 @@ class Retailstore:
                     # This step is for sending the transaction details to the chain
                     if append_return["complete"] == True:
                             send_return = self.mchain.sendrawTransaction(append_return["hex"])
-                            message = {"exchange-detials":decodedtranx,"exchange-addedtochain":send_return} 
+                            message = {"exchange_details":decodedtranx,"exchange_addedtochain":send_return} 
                             publish_handler({"node":"retailstore","messagecode":"decodeexchange","messagetype":"resp","message":message})            
                 else:
-                    message = {"exchange-detials":False,"exchange-addedtochain":False} 
+                    message = {"exchange_details":False,"exchange_addedtochain":False} 
                     publish_handler({"node":"retailstore","messagecode":"decodeexchange","messagetype":"resp","message":message})         
                     
             else:
-                message = {"exchange-detials":False,"exchange-addedtochain":False} 
+                message = {"exchange_details":False,"exchange_addedtochain":False} 
                 publish_handler({"node":"retailstore","messagecode":"decodeexchange","messagetype":"resp","message":message})         
         else:
-                message = {"exchange-detials":False,"exchange-addedtochain":False} 
+                message = {"exchange_details":False,"exchange_addedtochain":False} 
                 publish_handler({"node":"retailstore","messagecode":"decodeexchange","messagetype":"resp","message":message})         
                                             
 

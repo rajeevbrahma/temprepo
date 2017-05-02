@@ -85,12 +85,17 @@ class Warehouse:
             ownasset = {"warehouse-crop":20}
             otherasset = {"retailmoney":20}
             prepare_return = self.mchain.preparelockunspentexchange(ownasset)
-	    print prepare_return
-            if prepare_return != False:
+	        print prepare_return
+            if prepare_return != False or prepare_return.has_key("txid"):
                 createex_return = self.mchain.createrawExchange(prepare_return["txid"],prepare_return["vout"],otherasset)
                 print createex_return
-                message = {"op_return":str(createex_return),"hexblob":str(createex_return)}
-                publish_handler({"node":"warehouse","messagecode":"createexchange","messagetype":"resp","message":message})
+                if type(createex_return) != dict:               
+                
+                    message = {"op_return":str(createex_return),"hexblob":str(createex_return)}
+                    publish_handler({"node":"warehouse","messagecode":"createexchange","messagetype":"resp","message":message})
+                else:
+                    message = {"op_return":createex_return,"hexblob":""}
+                    publish_handler({"node":"warehouse","messagecode":"createexchange","messagetype":"resp","message":message})                   
             else:
                 publish_handler({"node":"warehouse","messagecode":"createexchange","messagetype":"resp","message":""})   
         except Exception as e:
@@ -121,20 +126,21 @@ class Warehouse:
                         # This step is for sending the transaction details to the chain
                         if append_return["complete"] == True:
                                 send_return = self.mchain.sendrawTransaction(append_return["hex"])
-                                message = {"exchange-detials":decodedtranx,"exchange-addedtochain":send_return} 
+                                message = {"exchange_details":decodedtranx,"exchange_addedtochain":send_return} 
                                 publish_handler({"node":"warehouse","messagecode":"decodeexchange","messagetype":"resp","message":message})            
                     else:
-                        message = {"exchange-detials":False,"exchange-addedtochain":False} 
+                        message = {"exchange_details":False,"exchange_addedtochain":False} 
                         publish_handler({"node":"warehouse","messagecode":"decodeexchange","messagetype":"resp","message":message})         
                         
                 else:
-                    message = {"exchange-detials":False,"exchange-addedtochain":False} 
+                    message = {"exchange_details":False,"exchange_addedtochain":False} 
                     publish_handler({"node":"warehouse","messagecode":"decodeexchange","messagetype":"resp","message":message})         
             else:
-                message = {"exchange-detials":False,"exchange-addedtochain":False} 
+                message = {"exchange_details":False,"exchange_addedtochain":False} 
                 publish_handler({"node":"warehouse","messagecode":"decodeexchange","messagetype":"resp","message":message})         
         except Exception as e:
-            print e                            
+            message = {"exchange_details":False,"exchange_addedtochain":False} 
+            publish_handler({"node":"warehouse","messagecode":"decodeexchange","messagetype":"resp","message":message})                            
 
     def convertasset(self):
         try:

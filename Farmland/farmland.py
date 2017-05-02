@@ -79,16 +79,20 @@ class Farmland:
 
 			prepare_return = self.mchain.preparelockunspentexchange(ownasset)
 			print prepare_return
-			if prepare_return != False:
+			if prepare_return != False or prepare_return.has_key("txid"):
 				createex_return = self.mchain.createrawExchange(prepare_return["txid"],prepare_return["vout"],otherasset)
-				print createex_return				
-				message = {"op_return":str(createex_return),"hexblob":str(createex_return)}
-				publish_handler({"node":"farmland","messagecode":"createexchange","messagetype":"resp","message":message})
+				print createex_return
+				if type(createex_return) != dict:				
+					message = {"op_return":str(createex_return),"hexblob":str(createex_return)}
+					publish_handler({"node":"farmland","messagecode":"createexchange","messagetype":"resp","message":message})
+				else:
+					message = {"op_return":createex_return,"hexblob":""}
+					publish_handler({"node":"farmland","messagecode":"createexchange","messagetype":"resp","message":message})						
 			else:
 				publish_handler({"node":"farmland","messagecode":"createexchange","messagetype":"resp","message":""})   
 		except Exception as e:
 				print e,"error in createExchange"
-				publish_handler({"node":"farmland","messagecode":"createexchange","messagetype":"resp","message":""})       
+				publish_handler({"node":"farmland","messagecode":"createexchange","messagetype":"resp","message":"","error":e})       
 		
 def pub_Init(): 
 	global pubnub
