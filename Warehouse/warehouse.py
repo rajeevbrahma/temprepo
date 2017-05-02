@@ -42,11 +42,11 @@ class Warehouse:
         message = {"op-return":assettranx}  
         publish_handler({"node":"warehouse","messagecode":"assettranx","messagetype":"resp","message":message})
 
-    def queryasstdetails(self,asset):
-        assetdetails = self.mchain.queryassetsdetails(asset)
+    def queryassetdetails(self,assetname):
+        assetdetails = self.mchain.queryassetsdetails(assetname)
         message = {"op-return":assetdetails}    
         publish_handler({"node":"warehouse","messagecode":"assetdetails","messagetype":"resp","message":message})
-
+	return assetdetails
     def getburnaddress(self):
         return self.mchain.getburnaddress()     
 
@@ -140,20 +140,23 @@ class Warehouse:
         try:
             # step 1 get totalbalances
             assetbalances = self.assetbalances()
+	    assetname = "warehousemoney"
             for i in range(0,len(assetbalances)):
-                if assetbalances[i]["name"] != self.assetname:
+                if assetbalances[i]["name"] != assetname:
                 # if assetbalances[i]["name"] == "crop":
                     self.convertasset_name = assetbalances[i]["name"]
                     self.convertasset_qty = assetbalances[i]["qty"]
                 else:
                     
                     message = {"op-return":False,"assetdescription":False,"burnasset-op-return":False}
-                    
+            print assetbalances
+	    print self.convertasset_name
             # step 2 get details of the asset
-            convertasset_details = self.mchain.queryassetsdetails(self.convertasset_name)
-            if len(convertasset_details) != 0:
+            convertasset_details = self.queryassetdetails(self.convertasset_name)
+            print convertasset_details
+	    if len(convertasset_details) != 0:
                 if convertasset_details[0].has_key("details"):
-                    convertedasset_name = "warehouse-crop3"
+                    convertedasset_name = "warehouse-crop"
                     assetdetails = {"name":convertedasset_name,"open":True} 
                     assetquantity = int(self.convertasset_qty) 
                     assetunit = 1 
@@ -186,7 +189,7 @@ class Warehouse:
             publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})
 
         except Exception as e:
-            print e 
+            print e,"convertassetname" 
             message.update({"error":e})
             publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})            
 
