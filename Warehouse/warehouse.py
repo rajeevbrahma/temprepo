@@ -82,11 +82,12 @@ class Warehouse:
     def createExchange(self):
         try:
             # Here asset will be a dictionary ex: {"asset1":1}
-            ownasset = {"warehouse-crop":20}
+            ownasset = {"warehouse-crop3":20}
             otherasset = {"retailmoney":20}
             prepare_return = self.mchain.preparelockunspentexchange(ownasset)
+	    print prepare_return
             if prepare_return != False:
-                createex_return = self.mchain.createExchange(prepare_return["txid"],prepare_return["vout"],otherasset)
+                createex_return = self.mchain.createrawExchange(prepare_return["txid"],prepare_return["vout"],otherasset)
                 print createex_return
                 message = {"op-return":str(createex_return),"hexblob":str(createex_return)}
                 publish_handler({"node":"warehouse","messagecode":"createexchange","messagetype":"resp","message":message})
@@ -211,7 +212,7 @@ def callback(message,channel):
                     WH.issueWHasset()
                     
             if message["messagecode"] == "createexchange":
-                    WH.issueWHasset()
+                    WH.createExchange()
             
             if message["messagecode"] == "decodeexchange":
                     WH.decodeExchange(message["hexblob"]) 
