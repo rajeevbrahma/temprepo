@@ -153,8 +153,8 @@ class Warehouse:
                     assetunit = 1 
                     assetnativeamount = 0
                     assetaddress = self.mchain.accountAddress()
-                    assetcustomfield = {"origin":"farmland","owner":"John-Distributor","asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"}# will be generated based on sensor data, fields will be decided$
-                    assetcustomfield.update(convertasset_details[0]["details"]) 
+                    assetcustomfield =convertasset_details[0]["details"] 
+                    assetcustomfield.update({"origin":"farmland","owner":"John-Distributor","asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"}) 
                     issueWHasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
                     assetdescription = {"assetname":convertedasset_name,"assetquantity":assetquantity,"assetmetrics":"dollars","assetowner":"John-Distributor"}
 
