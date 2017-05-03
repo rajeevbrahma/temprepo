@@ -156,33 +156,33 @@ class Warehouse:
                     
                     message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
             print assetbalances
-	    print self.convertasset_name
+	    	print self.convertasset_name
             # step 2 get details of the asset
             convertasset_details = self.queryassetdetails(self.convertasset_name)
             print convertasset_details
-	    if len(convertasset_details) != 0:
-                if convertasset_details[0].has_key("details"):
-                    convertedasset_name = "warehouse-crop"
-                    assetdetails = {"name":convertedasset_name,"open":True} 
-                    assetquantity = int(self.convertasset_qty) 
-                    assetunit = 1 
-                    assetnativeamount = 0
-		    assetaddress = self.mchain.accountAddress()
-                    assetcustomfield = {"asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"}# will be generated based on sensor data, fields will be decided$
-                    assetcustomfield.update(convertasset_details[0]["details"]) 
-                    issueWHasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
-                    assetdescription = {"assetname":convertedasset_name,"assetquantity":assetquantity,"assetmetrics":"dollars"}
-                    
-                    message = {"op_return":issueWHasset_return,"assetdescription":assetdescription}
-                    print message
-                    self.assetsubscribe(convertedasset_name)
-                    # publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
-                else:
-                    message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
-                    
-            else:
-                message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
-                    
+		    if len(convertasset_details) != 0:
+	                if convertasset_details[0].has_key("details"):
+	                    convertedasset_name = "warehouse-crop"
+	                    assetdetails = {"name":convertedasset_name,"open":True} 
+	                    assetquantity = int(self.convertasset_qty) 
+	                    assetunit = 1 
+	                    assetnativeamount = 0
+			    		assetaddress = self.mchain.accountAddress()
+	                    assetcustomfield = {"asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"}# will be generated based on sensor data, fields will be decided$
+	                    assetcustomfield.update(convertasset_details[0]["details"]) 
+	                    issueWHasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
+	                    assetdescription = {"assetname":convertedasset_name,"assetquantity":assetquantity,"assetmetrics":"dollars"}
+	                    
+	                    message = {"op_return":issueWHasset_return,"assetdescription":assetdescription}
+	                    print message
+	                    self.assetsubscribe(convertedasset_name)
+	                    # publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
+	                else:
+	                    message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
+	                    
+	        else:
+	            message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
+	                    
             if message["op_return"] !=False:    
                 # step 3 send the asset to the burn address
                 burnaddress = self.getburnaddress()
@@ -190,14 +190,33 @@ class Warehouse:
                     burnasset_return = self.burnasset(burnaddress,self.convertasset_name,self.convertasset_qty)
                     message.update({"burnasset_op_return":burnasset_return})
                 else:
-                    message.update({"burnasset_op_return":burnasset_return})
+                    message.update({"burnasset_op_return":burnasset_return})            
             
-            publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})
-
+        	else:
+        		message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
+	        publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})	    
         except Exception as e:
             print e,"convertassetname" 
             message.update({"error":e})
             publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})            
+
+    def issuemoreasset(self):
+        try:
+        	assetname = "crop"
+        	assetcustomfield = {"asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"} 
+            assetaddress = self.mchain.accountAddress()
+            issuemoreasset_return = self.mchain.issueMoreAsset(assetaddress,assetname,assetcustomfield)
+            
+            assetdescription = {"assetname":assetname,"assetcustomfield":assetcustomfield}
+            message = {"op-return":issuemoreasset_return,"assetdescription":assetdescription}
+            publish_handler({"messagecode":"issuemoreasset","messagetype":"resp","message":message})
+        
+        except Exception as e:
+            print e,"issuemoreasset error"
+            message = {"op-return":"error","message":e}
+            publish_handler({"messagecode":"issuemoreasset","messagetype":"resp","message":message})
+
+
 
 
 def pub_Init(): 
@@ -231,6 +250,8 @@ def callback(message,channel):
             
             if message["messagecode"] == "convertasset":
                     WH.convertasset()
+            if message["messagecode"] == "issuemore":
+            		WH.issuemoreasset()       
             
     except Exception as e:
         logging.error("The callback exception is %s,%s"%(e,type(e)))           
