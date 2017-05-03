@@ -33,7 +33,7 @@ class Farmland:
 	def assetbalances(self):
 		assetbalances = self.mchain.gettotalbalances()
 		return assetbalances	
-	def queryasstdetails(self,asset):
+	def queryassetdetails(self,asset):
 		assetdetails = self.mchain.queryassetsdetails(asset)
 		return assetdetails
 	def issueFSasset(self): 
@@ -84,34 +84,33 @@ class Farmland:
 				publish_handler({"node":"farmland","messagecode":"createexchange","messagetype":"resp","message":"","error":e})       
 	
 	def updateassetbalance(self):
-        try:
-            updateassetbalances_list = []
-            assetdescription = {}
-            temp_dict = {}
-            assetbalances = self.assetbalances()
-            assetdetails = []
-            print assetbalances
-            if assetbalances !=False:    
-                for i in range(0,len(assetbalances)):
-                    temp_dict.update({assetbalances[i]["name"]:assetbalances[i]["qty"]})
-                    assetdetails.append(self.queryassetdetails(assetbalances[i]["name"])[0])
-                    
-                for j in range(0,len(assetdetails)):
-                    assetdescription = {"assetquantity":assetdetails[j]["name"],
-                                "assetname":temp_dict[assetdetails[j]["name"]],
-                                "assetowner":assetdetails[j]["details"]["owner"],
-                                "assetmetrics":assetdetails[j]["details"]["assetmetrics"]}
+		try:
+			updateassetbalances_list = []
+			assetdescription = {}
+			temp_dict = {}
+			assetbalances = self.assetbalances()
+			assetdetails = []
+			print assetbalances
+			if assetbalances !=False:    
+			    for i in range(0,len(assetbalances)):
+			        temp_dict.update({assetbalances[i]["name"]:assetbalances[i]["qty"]})
+			        assetdetails.append(self.queryassetdetails(assetbalances[i]["name"])[0])
+			        
+			    for j in range(0,len(assetdetails)):
+			        assetdescription = {"assetquantity":temp_dict[assetdetails[j]["name"]],
+			                    "assetname":assetdetails[j]["name"],
+			                    "assetowner":assetdetails[j]["details"]["owner"],
+			                    "assetmetrics":assetdetails[j]["details"]["assetmetrics"]}
 
-                    updateassetbalances_list.append(assetdescription)
-                print updateassetbalances_list
-                message = {"op_return":updateassetbalances_list}
-            else:                
-                message = {"op_return":"error","message":e}
-            
-                publish_handler({"node":"farmland","messagecode":"updateassetbalance","messagetype":"resp","message":message})                        
-        except Exception as e:
-            message = {"op_return":"error","message":e}
-            publish_handler({"node":"farmland","messagecode":"updateassetbalance","messagetype":"resp","message":message})
+			        updateassetbalances_list.append(assetdescription)
+			    print updateassetbalances_list
+			    message = {"op_return":updateassetbalances_list}
+			else:                
+			    message = {"op_return":"error","message":e}
+			publish_handler({"node":"farmland","messagecode":"updateassetbalance","messagetype":"resp","message":message})
+		except Exception as e:
+			message = {"op_return":"error","message":e}
+			publish_handler({"node":"farmland","messagecode":"updateassetbalance","messagetype":"resp","message":message})
                 
 
 
@@ -147,7 +146,7 @@ def publish_handler(message):
 	try:
 	    pbreturn = pubnub.publish(channel = pubchannel ,message = message,error=error)
 
-	except Exception as error_pdhandler:
+	except Exception as error_pbhandler:
 	    print error_pbhandler
 
                 

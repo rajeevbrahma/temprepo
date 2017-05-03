@@ -200,8 +200,8 @@ class Warehouse:
                     assetdetails.append(self.queryassetdetails(assetbalances[i]["name"])[0])
                     
                 for j in range(0,len(assetdetails)):
-                    assetdescription = {"assetquantity":assetdetails[j]["name"],
-                                "assetname":temp_dict[assetdetails[j]["name"]],
+                    assetdescription = {"assetquantity":temp_dict[assetdetails[j]["name"]],
+                                "assetname":assetdetails[j]["name"],
                                 "assetowner":assetdetails[j]["details"]["owner"],
                                 "assetmetrics":assetdetails[j]["details"]["assetmetrics"]}
 
