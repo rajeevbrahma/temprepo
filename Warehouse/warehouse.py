@@ -59,7 +59,7 @@ class Warehouse:
             
             self.assetname = "warehousemoney" 
             assetdetails = {"name":self.assetname,"open":True}
-            assetquantity = 100  
+            assetquantity = 1000  
             assetunit = 1  
             assetnativeamount =0 
             assetcustomfield = {'currency':'dollars','owner':'John-Distributor'}

@@ -54,7 +54,7 @@ class Retailstore:
             assetaddress = self.mchain.accountAddress()
             assetname = "retailmoney" 
             assetdetails = {"name":assetname,"open":True} # along withthat a unique timestamp will be added
-            assetquantity = 100 
+            assetquantity = 1000 
             assetunit = 1 
             assetnativeamount =0 
             assetcustomfield = {'currency':'dollars','owner':'Peter-Retailer'}# will be generated based on sensor data, fields will be decided$

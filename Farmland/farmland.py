@@ -55,7 +55,7 @@ class Farmland:
 		    assetquantity = 1000 # may be a fixed or random number g$
 		    assetunit = 1 # This also a random generated based on lo$
 		    assetnativeamount =0 # not clear
-		    assetcustomfield ={"assetmetrics":"kgs",'croptemp':'27','crophumidity':'10','startdate':'2017-03-01','enddate':'2017-04-30',"asset-departuredate":'2017-05-05','farmer':'Mark-Farmer'}
+		    assetcustomfield ={"assetmetrics":"kgs",'croptemp':'27','crophumidity':'10','startdate':'2017-03-01','enddate':'2017-04-30',"asset-departuredate":'2017-05-05','owner':'Mark-Farmer'}
 		    issueFSasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
 
 		    self.assetsubscribe(assetname)
