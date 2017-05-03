@@ -30,23 +30,12 @@ class Farmland:
 		return self.mchain.accountAddress()
 	def assetsubscribe(self,asset):
 		self.mchain.subscribeToasset(asset)
-
 	def assetbalances(self):
 		assetbalances = self.mchain.gettotalbalances()
-		message = {"op_return":assetbalances}	
-		publish_handler({"node":"farmland","messagecode":"assetbalance","messagetype":"resp","message":message})
-
-	
-	def queryassettranx(self,asset):
-		assettranx = self.mchain.queryAssetTransactions(asset)
-		message = {"op_return":assettranx}	
-		publish_handler({"node":"farmland","messagecode":"assettranx","messagetype":"resp","message":message})
-
+		return assetbalances	
 	def queryasstdetails(self,asset):
 		assetdetails = self.mchain.queryassetsdetails(asset)
-		message = {"op_return":assetdetails}	
-		publish_handler({"node":"farmland","messagecode":"assetdetails","messagetype":"resp","message":message})
-
+		return assetdetails
 	def issueFSasset(self): 
 		try:
 		    assetaddress = self.mchain.accountAddress()
@@ -93,7 +82,39 @@ class Farmland:
 		except Exception as e:
 				print e,"error in createExchange"
 				publish_handler({"node":"farmland","messagecode":"createexchange","messagetype":"resp","message":"","error":e})       
-		
+	
+	def updateassetbalance(self):
+        try:
+            updateassetbalances_list = []
+            assetdescription = {}
+            temp_dict = {}
+            assetbalances = self.assetbalances()
+            assetdetails = []
+            print assetbalances
+            if assetbalances !=False:    
+                for i in range(0,len(assetbalances)):
+                    temp_dict.update({assetbalances[i]["name"]:assetbalances[i]["qty"]})
+                    assetdetails.append(self.queryassetdetails(assetbalances[i]["name"])[0])
+                    
+                for j in range(0,len(assetdetails)):
+                    assetdescription = {"assetquantity":assetdetails[j]["name"],
+                                "assetname":temp_dict[assetdetails[j]["name"]],
+                                "assetowner":assetdetails[j]["details"]["owner"],
+                                "assetmetrics":assetdetails[j]["details"]["assetmetrics"]}
+
+                    updateassetbalances_list.append(assetdescription)
+                print updateassetbalances_list
+                message = {"op_return":updateassetbalances_list}
+            else:                
+                message = {"op_return":"error","message":e}
+            
+                publish_handler({"node":"farmland","messagecode":"updateassetbalance","messagetype":"resp","message":message})                        
+        except Exception as e:
+            message = {"op_return":"error","message":e}
+            publish_handler({"node":"farmland","messagecode":"updateassetbalance","messagetype":"resp","message":message})
+                
+
+
 def pub_Init(): 
 	global pubnub
 	try:
@@ -113,19 +134,10 @@ def callback(message,channel):
 		if message["messagetype"] == "req":
 			if message["messagecode"] == "issueasset":
 				FL.issueFSasset()
-
 			if message["messagecode"] == "createexchange":
 				FL.createExchange()
-
-			if message["messagecode"] == "assettranx":
-				FL.queryassettranx(message["asset"])
-
-			if message["messagecode"] == "assetdetails":
-				FL.queryasstdetails(message["asset"])
-
-			if message["messagecode"] == "assetbalance":
-				FL.assetbalances()
-
+			if message["messagecode"] == "updateassetbalance":
+				FL.updateassetbalance()
 	except Exception as e:
 		logging.error("The callback exception is %s,%s"%(e,type(e)))            
 		logging.info(message)
@@ -180,6 +192,14 @@ if __name__ == '__main__':
 	FL = Farmland(rpcuser,rpcpasswd,rpchost,rpcport,chainname)
 	FL.connectTochain()
 	pub_Init()
+
+# message = {"op_return":assetbalances}	
+# publish_handler({"node":"farmland","messagecode":"assetbalance","messagetype":"resp","message":message})
+# message = {"op_return":assetdetails}	
+# publish_handler({"node":"farmland","messagecode":"assetdetails","messagetype":"resp","message":message})
+
+
+
 
 
 

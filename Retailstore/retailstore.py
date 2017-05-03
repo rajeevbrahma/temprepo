@@ -35,19 +35,12 @@ class Retailstore:
 
     def assetbalances(self):
         assetbalances = self.mchain.gettotalbalances()
-        message = {"op_return":assetbalances}   
-        publish_handler({"node":"retailstore","messagecode":"assetbalance","messagetype":"resp","message":message})
-
-    def queryassettranx(self,asset):
-        assettranx = self.mchain.queryAssetTransactions(asset)
-        message = {"op_return":assettranx}  
-        publish_handler({"node":"retailstore","messagecode":"assettranx","messagetype":"resp","message":message})
-
+        return assetbalances      
+   
     def queryasstdetails(self,asset):
         assetdetails = self.mchain.queryassetsdetails(asset)
-        message = {"op_return":assetdetails}    
-        publish_handler({"node":"retailstore","messagecode":"assetdetails","messagetype":"resp","message":message})
-    
+        return assetdetails
+        
     
     def issueRSasset(self): 
         try:
@@ -75,41 +68,73 @@ class Retailstore:
     
 
     def decodeExchange(self,hexBlob):
-        # The following will give the details regarding the exchange
-        
-        ownasset = {"retailmoney":20}
-        otherasset = {"crop":20}
-        
-        # --step1 decode the hexblob you got in the createexchange procedure
-        decodedtranx =  self.mchain.decoderawExchange(hexBlob)
-        if type(decodedtranx) == dict:
-            if decodedtranx.has_key("offer") and decodedtranx.has_key("ask"):
-                # --step2
-                # We are locking the asset(ownasset)
-                prepare_return = self.mchain.preparelockunspentexchange(ownasset)
-                print prepare_return
-                if prepare_return != False:                
-                    # --step3 
-                    # Now we to do the appenexchange operation by giving hexblob and txid and otherasset 
-                    append_return = self.mchain.appendrawExchange(hexBlob,prepare_return["txid"],prepare_return["vout"],otherasset)
-                    print append_return
-                    # -- step 6 
-                    # This step is for sending the transaction details to the chain
-                    if append_return["complete"] == True:
+        try:
+            # The following will give the details regarding the exchange
+
+            ownasset = {"retailmoney":50}
+            otherasset = {"warehouse-crop":4}
+
+            # --step1 decode the hexblob you got in the createexchange procedure
+            decodedtranx =  self.mchain.decoderawExchange(hexBlob)
+            if type(decodedtranx) == dict:
+                if decodedtranx.has_key("offer") and decodedtranx.has_key("ask"):
+                    # --step2
+                    # We are locking the asset(ownasset)
+                    prepare_return = self.mchain.preparelockunspentexchange(ownasset)
+                    print prepare_return
+                    if prepare_return != False:                
+                        # --step3 
+                        # Now we to do the appenexchange operation by giving hexblob and txid and otherasset 
+                        append_return = self.mchain.appendrawExchange(hexBlob,prepare_return["txid"],prepare_return["vout"],otherasset)
+                        print append_return
+                        # -- step 4 
+                        # This step is for sending the transaction details to the chain
+                        if append_return["complete"] == True:
                             send_return = self.mchain.sendrawTransaction(append_return["hex"])
                             message = {"exchange_details":decodedtranx,"exchange_addedtochain":send_return} 
-                            publish_handler({"node":"retailstore","messagecode":"decodeexchange","messagetype":"resp","message":message})            
+                    else:
+                        message = {"exchange_details":False,"exchange_addedtochain":False} 
                 else:
                     message = {"exchange_details":False,"exchange_addedtochain":False} 
-                    publish_handler({"node":"retailstore","messagecode":"decodeexchange","messagetype":"resp","message":message})         
-                    
             else:
                 message = {"exchange_details":False,"exchange_addedtochain":False} 
-                publish_handler({"node":"retailstore","messagecode":"decodeexchange","messagetype":"resp","message":message})         
-        else:
-                message = {"exchange_details":False,"exchange_addedtochain":False} 
-                publish_handler({"node":"retailstore","messagecode":"decodeexchange","messagetype":"resp","message":message})         
-                                            
+        
+            publish_handler({"node":"retailstore","messagecode":"decodeexchange","messagetype":"resp","message":message})         
+        except Exception as e:
+            print e
+            message = {"exchange_details":False,"exchange_addedtochain":False} 
+            publish_handler({"node":"retailstore","messagecode":"decodeexchange","messagetype":"resp","message":message})                            
+
+    def updateassetbalance(self):
+        try:
+            updateassetbalances_list = []
+            assetdescription = {}
+            temp_dict = {}
+            assetbalances = self.assetbalances()
+            assetdetails = []
+            print assetbalances
+            if assetbalances !=False:    
+                for i in range(0,len(assetbalances)):
+                    temp_dict.update({assetbalances[i]["name"]:assetbalances[i]["qty"]})
+                    assetdetails.append(self.queryassetdetails(assetbalances[i]["name"])[0])
+                    
+                for j in range(0,len(assetdetails)):
+                    assetdescription = {"assetquantity":assetdetails[j]["name"],
+                                "assetname":temp_dict[assetdetails[j]["name"]],
+                                "assetowner":assetdetails[j]["details"]["owner"],
+                                "assetmetrics":assetdetails[j]["details"]["assetmetrics"]}
+
+                    updateassetbalances_list.append(assetdescription)
+                print updateassetbalances_list
+                message = {"op_return":updateassetbalances_list}
+            else:                
+                message = {"op_return":"error","message":e}
+            
+                publish_handler({"node":"retailstore","messagecode":"updateassetbalance","messagetype":"resp","message":message})                        
+        except Exception as e:
+            message = {"op_return":"error","message":e}
+            publish_handler({"node":"retailstore","messagecode":"updateassetbalance","messagetype":"resp","message":message})
+                        
 
         
 def pub_Init(): 
@@ -130,13 +155,13 @@ def callback(message,channel):
         print message
         if message["messagetype"] == "req":
             if message["messagecode"] == "issueasset":
-                    RS.issueRSasset()
-            
+                    RS.issueRSasset()            
             if message["messagecode"] == "decodeexchange":
-                    RS.decodeExchange(message["hexblob"]) 
-            
+                    RS.decodeExchange(message["hexblob"])            
             if message["messagecode"] == "assetbalance":
                     RS.assetbalances()
+            if message["messagecode"] == "updateassetbalance":
+                    RS.updateassetbalance()        
 
     except Exception as e:
         print e,"callback error"
@@ -187,3 +212,14 @@ if __name__ == '__main__':
     RS = Retailstore(rpcuser,rpcpasswd,rpchost,rpcport,chainname)
     RS.connectTochain()
     pub_Init()
+
+
+# message = {"op_return":assetbalances}   
+# publish_handler({"node":"retailstore","messagecode":"assetbalance","messagetype":"resp","message":message})
+#  def queryassettranx(self,asset):
+# assettranx = self.mchain.queryAssetTransactions(asset)
+# message = {"op_return":assettranx}  
+# publish_handler({"node":"retailstore","messagecode":"assettranx","messagetype":"resp","message":message})
+# message = {"op_return":assetdetails}
+# publish_handler({"node":"retailstore","messagecode":"assetdetails","messagetype":"resp","message":message})
+    
