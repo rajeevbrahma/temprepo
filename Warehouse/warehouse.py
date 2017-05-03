@@ -82,10 +82,10 @@ class Warehouse:
     def createExchange(self):
         try:
             # Here asset will be a dictionary ex: {"asset1":1}
-            ownasset = {"warehouse-crop":20}
+            ownasset = {"crop":20}
             otherasset = {"retailmoney":20}
             prepare_return = self.mchain.preparelockunspentexchange(ownasset)
-	        print prepare_return
+	    print prepare_return
             if prepare_return != False or prepare_return.has_key("txid"):
                 createex_return = self.mchain.createrawExchange(prepare_return["txid"],prepare_return["vout"],otherasset)
                 print createex_return
@@ -146,7 +146,7 @@ class Warehouse:
         try:
             # step 1 get totalbalances
             assetbalances = self.assetbalances()
-	        assetname = "warehousemoney"
+	    assetname = "warehousemoney"
             for i in range(0,len(assetbalances)):
                 if assetbalances[i]["name"] != assetname:
                 # if assetbalances[i]["name"] == "crop":
@@ -156,32 +156,32 @@ class Warehouse:
                     
                     message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
             print assetbalances
-	    	print self.convertasset_name
+	    print self.convertasset_name
             # step 2 get details of the asset
             convertasset_details = self.queryassetdetails(self.convertasset_name)
             print convertasset_details
-		    if len(convertasset_details) != 0:
-	                if convertasset_details[0].has_key("details"):
-	                    convertedasset_name = "warehouse-crop"
-	                    assetdetails = {"name":convertedasset_name,"open":True} 
-	                    assetquantity = int(self.convertasset_qty) 
-	                    assetunit = 1 
-	                    assetnativeamount = 0
-			    		assetaddress = self.mchain.accountAddress()
-	                    assetcustomfield = {"asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"}# will be generated based on sensor data, fields will be decided$
-	                    assetcustomfield.update(convertasset_details[0]["details"]) 
-	                    issueWHasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
-	                    assetdescription = {"assetname":convertedasset_name,"assetquantity":assetquantity,"assetmetrics":"dollars"}
+	    if len(convertasset_details) != 0:
+	    	if convertasset_details[0].has_key("details"):
+	        	convertedasset_name = "warehouse-crop"
+	                assetdetails = {"name":convertedasset_name,"open":True} 
+	                assetquantity = int(self.convertasset_qty) 
+	                assetunit = 1 
+	                assetnativeamount = 0
+			assetaddress = self.mchain.accountAddress()
+	                assetcustomfield = {"asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"}# will be generated based on sensor data, fields will be decided$
+	                assetcustomfield.update(convertasset_details[0]["details"]) 
+	                issueWHasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
+	                assetdescription = {"assetname":convertedasset_name,"assetquantity":assetquantity,"assetmetrics":"dollars"}
 	                    
-	                    message = {"op_return":issueWHasset_return,"assetdescription":assetdescription}
-	                    print message
-	                    self.assetsubscribe(convertedasset_name)
-	                    # publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
-	                else:
-	                    message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
-	                    
+	                message = {"op_return":issueWHasset_return,"assetdescription":assetdescription}
+	                print message
+	                self.assetsubscribe(convertedasset_name)
+	                # publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
 	        else:
-	            message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
+			message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
+	                    
+	    else:
+		message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
 	                    
             if message["op_return"] !=False:    
                 # step 3 send the asset to the burn address
@@ -192,8 +192,8 @@ class Warehouse:
                 else:
                     message.update({"burnasset_op_return":burnasset_return})            
             
-        	else:
-        		message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
+       	    else:
+        	message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
 	        publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})	    
         except Exception as e:
             print e,"convertassetname" 
@@ -202,8 +202,8 @@ class Warehouse:
 
     def issuemoreasset(self):
         try:
-        	assetname = "crop"
-        	assetcustomfield = {"asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"} 
+            assetname = "crop"
+            assetcustomfield = {"asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"} 
             assetaddress = self.mchain.accountAddress()
             issuemoreasset_return = self.mchain.issueMoreAsset(assetaddress,assetname,assetcustomfield)
             
@@ -250,7 +250,7 @@ def callback(message,channel):
             
             if message["messagecode"] == "convertasset":
                     WH.convertasset()
-            if message["messagecode"] == "issuemore":
+            if message["messagecode"] == "issuemoreasset":
             		WH.issuemoreasset()       
             
     except Exception as e:
