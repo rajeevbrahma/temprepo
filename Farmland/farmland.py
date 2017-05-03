@@ -60,7 +60,7 @@ class Farmland:
 
 		    self.assetsubscribe(assetname)
 		    
-		    assetdescription = {"assetname":assetname,"assetquantity":assetquantity,"assetmetrics":"kgs"}
+		    assetdescription = {"assetname":assetname,"assetquantity":assetquantity,"assetmetrics":"kgs","assetowner":"Mark-Farmer"}
 		    message = {"op_return":issueFSasset_return,"assetdescription":assetdescription}
 
 		    publish_handler({"node":"farmland","messagecode":"issueasset","messagetype":"resp","message":message})
