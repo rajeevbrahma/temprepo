@@ -205,7 +205,9 @@ class Warehouse:
             assetdescription = {}
             temp_dict = {}
             assetbalances = self.assetbalances()
-            if assetbalances !=False:    
+	    assetdetails = []
+            print assetbalances
+	    if assetbalances !=False:    
                 for i in range(0,len(assetbalances)):
                     temp_dict.update({assetbalances[i]["name"]:assetbalances[i]["qty"]})
                     assetdetails.append(self.queryassetdetails(assetbalances[i]["name"])[0])
@@ -259,7 +261,9 @@ def callback(message,channel):
             if message["messagecode"] == "convertasset":
                     WH.convertasset()
             if message["messagecode"] == "issuemoreasset":
-            		WH.issuemoreasset()       
+            	    WH.issuemoreasset()
+	    if message["messagecode"] == "updateassetbalance":
+		    WH.updateassetbalance()	       
             
     except Exception as e:
         logging.error("The callback exception is %s,%s"%(e,type(e)))           
