@@ -55,7 +55,7 @@ def publish_handler(channel,message):
 def main():
 
 	while(1):
-		inpt = raw_input("CHOOSE ONE OPTION \t\t\t\n1 create farmasset,\n2 create wareasset,\n3 create retailasset , \n4 createexchange - from Farmland,\n5 decodeexchange - in warehouse,\n6 createexchange - from warehouse \n7 decodeexchange - in retailstore \n8 convertasset  \n0 totalbalances\n\n\n\t")
+		inpt = raw_input("CHOOSE ONE OPTION \t\t\t\n1 create farmasset,\n2 create wareasset,\n3 create retailasset , \n4 createexchange - from Farmland,\n5 decodeexchange - in warehouse,\n6 createexchange - from warehouse \n7 decodeexchange - in retailstore \n8 convertasset \n9updateassetbalance \n0 totalbalances\n\n\n\t")
 		if(inpt == "1"):
 			publish_handler(farmchannel,{"messagecode":"issueasset","messagetype":"req"})
 		elif(inpt == "2"):
@@ -85,7 +85,10 @@ def main():
 			if inpt3 == "2":	
 				publish_handler(warechannel,{"messagetype":"req","messagecode":"assetbalance"})
 			if inpt3 == "3":	
-				publish_handler(retailchannel,{"messagetype":"req","messagecode":"assetbalance"})		
+				publish_handler(retailchannel,{"messagetype":"req","messagecode":"assetbalance"})
+
+		elif(inpt == '9'):
+			publish_handler(warechannel,{"messagecode":"updateassetbalance","messagetype":"req"})				
 		else: 
 			pass
 

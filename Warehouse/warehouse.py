@@ -35,8 +35,8 @@ class Warehouse:
     def assetbalances(self):
         assetbalances = self.mchain.gettotalbalances()
         message = {"op_return":assetbalances}   
-        publish_handler({"node":"warehouse","messagecode":"assetbalance","messagetype":"resp","message":message})
-	return assetbalances
+        # publish_handler({"node":"warehouse","messagecode":"assetbalance","messagetype":"resp","message":message})
+        return assetbalances
     def queryassettranx(self,asset):
         assettranx = self.mchain.queryAssetTransactions(asset)
         message = {"op_return":assettranx}  
@@ -46,7 +46,7 @@ class Warehouse:
         assetdetails = self.mchain.queryassetsdetails(assetname)
         message = {"op_return":assetdetails}    
         publish_handler({"node":"warehouse","messagecode":"assetdetails","messagetype":"resp","message":message})
-	return assetdetails
+        return assetdetails
     def getburnaddress(self):
         return self.mchain.getburnaddress()     
 
@@ -62,7 +62,7 @@ class Warehouse:
             assetquantity = 1000  
             assetunit = 1  
             assetnativeamount =0 
-            assetcustomfield = {'currency':'dollars','owner':'John-Distributor'}
+            assetcustomfield = {'assetmetrics':'dollars','owner':'John-Distributor'}
             
             issueWHasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
             assetdescription = {"assetname":self.assetname,"assetquantity":assetquantity,"assetmetrics":"dollars","assetowner":"John-Distributor"}
@@ -146,43 +146,41 @@ class Warehouse:
         try:
             # step 1 get totalbalances
             assetbalances = self.assetbalances()
-	    assetname = "warehousemoney"
+            assetname = "warehousemoney"
             for i in range(0,len(assetbalances)):
                 if assetbalances[i]["name"] != assetname:
-                # if assetbalances[i]["name"] == "crop":
+                    # if assetbalances[i]["name"] == "crop":
                     self.convertasset_name = assetbalances[i]["name"]
                     self.convertasset_qty = assetbalances[i]["qty"]
                 else:
-                    
                     message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
-            print assetbalances
-	    print self.convertasset_name
             # step 2 get details of the asset
             convertasset_details = self.queryassetdetails(self.convertasset_name)
             print convertasset_details
-	    if len(convertasset_details) != 0:
-	    	if convertasset_details[0].has_key("details"):
-	        	convertedasset_name = "warehouse-crop"
-	                assetdetails = {"name":convertedasset_name,"open":True} 
-	                assetquantity = int(self.convertasset_qty) 
-	                assetunit = 1 
-	                assetnativeamount = 0
-			assetaddress = self.mchain.accountAddress()
-	                assetcustomfield = {"asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"}# will be generated based on sensor data, fields will be decided$
-	                assetcustomfield.update(convertasset_details[0]["details"]) 
-	                issueWHasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
-	                assetdescription = {"assetname":convertedasset_name,"assetquantity":assetquantity,"assetmetrics":"dollars"}
-	                    
-	                message = {"op_return":issueWHasset_return,"assetdescription":assetdescription}
-	                print message
-	                self.assetsubscribe(convertedasset_name)
-	                # publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
-	        else:
-			message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
-	                    
-	    else:
-		message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
-	                    
+            
+            if len(convertasset_details) != 0:
+                if convertasset_details[0].has_key("details"):
+                    convertedasset_name = "warehouse-crop"
+                    assetdetails = {"name":convertedasset_name,"open":True} 
+                    assetquantity = int(self.convertasset_qty) 
+                    assetunit = 1 
+                    assetnativeamount = 0
+                    assetaddress = self.mchain.accountAddress()
+                    assetcustomfield = {"origin":"farmland","owner":"John-Distributor","asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"}# will be generated based on sensor data, fields will be decided$
+                    assetcustomfield.update(convertasset_details[0]["details"]) 
+                    issueWHasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
+                    assetdescription = {"assetname":convertedasset_name,"assetquantity":assetquantity,"assetmetrics":"dollars","assetowner":"John-Distributor"}
+
+                    message = {"op_return":issueWHasset_return,"assetdescription":assetdescription}
+                    print message
+                    self.assetsubscribe(convertedasset_name)
+                    # publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
+                else:
+                    message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
+
+            else:
+                message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
+
             if message["op_return"] !=False:    
                 # step 3 send the asset to the burn address
                 burnaddress = self.getburnaddress()
@@ -191,33 +189,43 @@ class Warehouse:
                     message.update({"burnasset_op_return":burnasset_return})
                 else:
                     message.update({"burnasset_op_return":burnasset_return})            
-            
-       	    else:
-        	message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
-	        publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})	    
+
+            else:
+                message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
+                publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})	    
         except Exception as e:
             print e,"convertassetname" 
             message.update({"error":e})
             publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})            
 
-    def issuemoreasset(self):
+    
+    def updateassetbalance(self):
         try:
-            assetname = "crop"
-            assetcustomfield = {"asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"} 
-            assetaddress = self.mchain.accountAddress()
-            issuemoreasset_return = self.mchain.issueMoreAsset(assetaddress,assetname,assetcustomfield)
-            
-            assetdescription = {"assetname":assetname,"assetcustomfield":assetcustomfield}
-            message = {"op-return":issuemoreasset_return,"assetdescription":assetdescription}
-            publish_handler({"messagecode":"issuemoreasset","messagetype":"resp","message":message})
-        
+            updateassetbalances_dict = {}
+            assetdescription = {}
+            temp_dict = {}
+            assetbalances = self.assetbalances()
+            if assetbalances !=False:    
+                for i in range(0,len(assetbalances)):
+                    temp_dict.update({assetbalances[i]["name"]:assetbalances[i]["qty"]})
+                    assetdetails.append(self.queryassetdetails(assetbalances[i]["name"])[0])
+                    
+                for j in range(0,len(assetdetails)):
+                    assetdescription = {"assetquantity":assetdetails[j]["name"],
+                                "assetname":temp_dict[assetdetails[j]["name"]],
+                                "assetowner":assetdetails[j]["details"]["owner"],
+                                "assetmetrics":assetdetails[j]["details"]["assetmetrics"]}
+
+                    updateassetbalances_dict.update({j+1:assetdescription})
+                print updateassetbalances_dict
+            else:
+                print assetbalances
+                message = {"op_return":"error","message":e}
+                publish_handler({"messagecode":"issuemoreasset","messagetype":"resp","message":message})                        
         except Exception as e:
-            print e,"issuemoreasset error"
-            message = {"op-return":"error","message":e}
+            message = {"op_return":"error","message":e}
             publish_handler({"messagecode":"issuemoreasset","messagetype":"resp","message":message})
-
-
-
+                
 
 def pub_Init(): 
     global pubnub
@@ -301,3 +309,20 @@ if __name__ == '__main__':
     WH = Warehouse(rpcuser,rpcpasswd,rpchost,rpcport,chainname)
     WH.connectTochain()
     pub_Init()
+
+
+# def issuemoreasset(self):
+    #     try:
+    #         assetname = "crop"
+    #         assetcustomfield = {"asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"} 
+    #         assetaddress = self.mchain.accountAddress()
+    #         issuemoreasset_return = self.mchain.issueMoreAsset(assetaddress,assetname,assetcustomfield)
+            
+    #         assetdescription = {"assetname":assetname,"assetcustomfield":assetcustomfield}
+    #         message = {"op_return":issuemoreasset_return,"assetdescription":assetdescription}
+    #         publish_handler({"messagecode":"issuemoreasset","messagetype":"resp","message":message})
+        
+    #     except Exception as e:
+    #         print e,"issuemoreasset error"
+    #         message = {"op_return":"error","message":e}
+    #         publish_handler({"messagecode":"issuemoreasset","messagetype":"resp","message":message})
