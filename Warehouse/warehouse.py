@@ -71,8 +71,8 @@ class Warehouse:
     def createExchange(self):
         try:
             # Here asset will be a dictionary ex: {"asset1":1}
-            ownasset = {"crop":20}
-            otherasset = {"retailmoney":20}
+            ownasset = {"warehouse-crop":4}
+            otherasset = {"retailmoney":50}
             prepare_return = self.mchain.preparelockunspentexchange(ownasset)
             print prepare_return
             if prepare_return != False or prepare_return.has_key("txid"):
@@ -95,8 +95,8 @@ class Warehouse:
     def decodeExchange(self,hexBlob):
         # The following will give the details regarding the exchange
         try:    
-            ownasset = {"warehousemoney":50}
-            otherasset = {"warehouse-crop":4}
+            ownasset = {"warehousemoney":20}
+            otherasset = {"crop":20}
 
             # --step1 decode the hexblob you got in the createexchange procedure
             decodedtranx =  self.mchain.decoderawExchange(hexBlob)
@@ -179,7 +179,7 @@ class Warehouse:
 
             else:
                 message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
-                publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})	    
+            publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})	    
         except Exception as e:
             print e,"convertassetname" 
             message.update({"error":e})
@@ -211,7 +211,7 @@ class Warehouse:
             else:                
                 message = {"op_return":"error","message":e}
             
-                publish_handler({"node":"warehouse","messagecode":"updateassetbalance","messagetype":"resp","message":message})                        
+            publish_handler({"node":"warehouse","messagecode":"updateassetbalance","messagetype":"resp","message":message})                        
         except Exception as e:
             message = {"op_return":"error","message":e}
             publish_handler({"node":"warehouse","messagecode":"updateassetbalance","messagetype":"resp","message":message})

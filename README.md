@@ -4,13 +4,14 @@ Step 1 : Pull the docker
 
 Step 2 : Open three terminals and run the docker image in three terminals.
 
-Step 3 : open "/tmp" folder in the container.
+Step 3 : run cd in the container.
 
 Step 4 : clone the repository from three terminals
 
 Step 5 : create the chain
 
 Step 6 : Connect from other nodes and give permission for other nodes. and start the chain from the other nodes also.
+	Step 6.1 : Give permission to the burnaddress.
 
 Step 7 : run the "get.sh" script in the three containers. and save those parameters.
 

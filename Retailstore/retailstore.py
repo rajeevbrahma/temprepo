@@ -130,7 +130,7 @@ class Retailstore:
             else:                
                 message = {"op_return":"error","message":e}
             
-                publish_handler({"node":"retailstore","messagecode":"updateassetbalance","messagetype":"resp","message":message})                        
+            publish_handler({"node":"retailstore","messagecode":"updateassetbalance","messagetype":"resp","message":message})                        
         except Exception as e:
             message = {"op_return":"error","message":e}
             publish_handler({"node":"retailstore","messagecode":"updateassetbalance","messagetype":"resp","message":message})
