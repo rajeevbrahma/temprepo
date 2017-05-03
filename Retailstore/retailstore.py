@@ -59,7 +59,7 @@ class Retailstore:
             assetnativeamount =0 
             assetcustomfield = {'currency':'dollars','owner':'Peter-Retailer'}# will be generated based on sensor data, fields will be decided$
             issueRSasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
-            assetdescription = {"assetname":assetname,"assetquantity":assetquantity,"assetmetrics":"dollars"}
+            assetdescription = {"assetname":assetname,"assetquantity":assetquantity,"assetmetrics":"dollars","assetowner":"Peter-Retailer"}
             
             message = {"op_return":issueRSasset_return,"assetdescription":assetdescription}
             
