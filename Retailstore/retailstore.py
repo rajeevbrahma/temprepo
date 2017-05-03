@@ -78,7 +78,7 @@ class Retailstore:
         # The following will give the details regarding the exchange
         
         ownasset = {"retailmoney":20}
-        otherasset = {"warehouse-crop":20}
+        otherasset = {"crop":20}
         
         # --step1 decode the hexblob you got in the createexchange procedure
         decodedtranx =  self.mchain.decoderawExchange(hexBlob)
