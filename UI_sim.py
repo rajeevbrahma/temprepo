@@ -74,7 +74,8 @@ def main():
 			publish_handler(retailchannel,{"messagetype":"req","messagecode":"decodeexchange","hexblob":hexblob})
 		
 		elif(inpt == '8'):
-			publish_handler(warechannel,{"messagecode":"convertasset","messagetype":"req"})				
+			# publish_handler(warechannel,{"messagecode":"convertasset","messagetype":"req"})
+			publish_handler(warechannel,{"messagecode":"issuemoreasset","messagetype":"req"})				
 			
 
 		elif(inpt == "0"):
