@@ -65,7 +65,7 @@ class Warehouse:
             assetcustomfield = {'currency':'dollars','owner':'John-Distributor'}
             
             issueWHasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
-            assetdescription = {"assetname":self.assetname,"assetquantity":assetquantity,"assetmetrics":"dollars"}
+            assetdescription = {"assetname":self.assetname,"assetquantity":assetquantity,"assetmetrics":"dollars","assetowner":"John-Distributor"}
             
             message = {"op_return":issueWHasset_return,"assetdescription":assetdescription}
             
