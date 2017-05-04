@@ -164,7 +164,7 @@ class Farmland:
 		except Exception as e:
 			message = {"op_return":"error","message":e}
 			publish_handler({"node":"farmland","messagecode":"updateassetbalance","messagetype":"resp","message":message})
-            print ("The updateassetbalances error",e)    
+            		print ("The updateassetbalances error",e)    
 
 
 '''****************************************************************************************
