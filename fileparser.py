@@ -34,16 +34,3 @@ class ConfigFileParser:
 		else:
 			return None
 
-
-# if __name__ == '__main__':
-# 	cf = ConfigFileParser()
-# 	retrn  = cf.parseConfig("config.ini")
-# 	print retrn
-	# retrn = cf.getConfig("databaseurl")
-	# print retrn
-# NO_OF_WORKFLOWS = ConfigSectionMap("Details")['no_of_workflows']
-# SELF_RID  = ConfigSectionMap("Details")['self_rid']
-# REGISTRATION_FUNCTION_RID  = ConfigSectionMap("Details")['registration_function_rid']
-
-# print NO_OF_WORKFLOWS,SELF_RID,REGISTRATION_FUNCTION_RID
-
