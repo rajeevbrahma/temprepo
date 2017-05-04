@@ -214,7 +214,6 @@ class Warehouse:
                     message = {"op_return":issueWHasset_return,"assetdescription":assetdescription}
                     print message
                     self.assetsubscribe(convertedasset_name)
-                    # publish_handler({"messagecode":"issueasset","messagetype":"resp","message":message})
                 else:
                     message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
 
@@ -236,7 +235,7 @@ class Warehouse:
             else:
                 message = {"op_return":False,"assetdescription":False,"burnasset_op_return":False}
             # publishing the response message to UI. 
-            publish_handler({"node":"warehouse","messagecode":"issueasset","messagetype":"resp","message":message})	    
+            publish_handler({"node":"warehouse","messagecode":"convertasset","messagetype":"resp","message":message})	    
         except Exception as e:
             print e,"convertassetname" 
             message.update({"error":e})
