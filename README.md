@@ -2,9 +2,18 @@
 
 Step 1 : Pull the docker
 
+Note : This docker image has the following things installed.
+		pip
+		wget
+		multichain [link](http://www.multichain.com/download-install/)
+		Savoir [link](https://github.com/DXMarkets/Savoir)
+		Pubnub==3.8.3 [link](https://www.pubnub.com/docs/python/pubnub-python-sdk)
+		logging 
+		git
+
 Step 2 : Open three terminals and run the docker image in three terminals.
 
-Note : Fix the terminals with the names 
+Note : Decide the terminals with the names 
 	   
 	   example :
 	   			container 1 - farmland 
@@ -40,11 +49,11 @@ Step 5.2 : run the command "multichaind chain1 -daemon"
 
 Step 6 : Connect to the chain from the other(warehouse,retailstore) containers.
 
-Step 6.1 : copy the command that given when you started the chain in farmland and 
+Step 6.1 : copy the command that given when you started the chain in farmland.
 
 ![alt-tag](https://github.com/rajeevbrahma/temprepo/blob/master/screenshots/d12.png)
 
-Step 6.2 : run that command in other contatiners.
+Step 6.2 : Run that command in other contatiners.
 
 ![alt-tag](https://github.com/rajeevbrahma/temprepo/blob/master/screenshots/d13.png)
 
