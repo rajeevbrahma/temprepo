@@ -1,15 +1,35 @@
 # Blockchain-Agri-Usecase-using-Multichain
 
-Step 1 : Pull the docker
+Step 1 : Download the Docker image
+
+Step 1.1 : Copy to the home folder and load the docker by running the following command
+
+		sudo docker load --input multichaindocker
+![alt-tag](https://github.com/rajeevbrahma/temprepo/blob/master/screenshots/d29.png)
+
+![alt-tag](https://github.com/rajeevbrahma/temprepo/blob/master/screenshots/30.png)		
+
+Step 1.2 : Run the following command to check installed image.
+		
+		sudo docker images
+
+![alt-tag](https://github.com/rajeevbrahma/temprepo/blob/master/screenshots/31.png)		
 
 Note : This docker image has the following things installed.
-		pip
-		wget
-		multichain [link](http://www.multichain.com/download-install/)
-		Savoir [link](https://github.com/DXMarkets/Savoir)
-		Pubnub==3.8.3 [link](https://www.pubnub.com/docs/python/pubnub-python-sdk)
-		logging 
-		git
+		
+pip
+
+wget
+
+multichain [link](http://www.multichain.com/download-install/)
+
+Savoir [link](https://github.com/DXMarkets/Savoir)
+
+Pubnub==3.8.3 [link](https://www.pubnub.com/docs/python/pubnub-python-sdk)
+
+logging 
+
+git
 
 Step 2 : Open three terminals and run the docker image in three terminals.
 
@@ -113,7 +133,11 @@ Step 9.3 : Grant receive permission to the burn address by running following com
 
 ![alt-tag](https://github.com/rajeevbrahma/temprepo/blob/master/screenshots/d24.png)
 
-Step 10 : Now goto the repository root folder and run the following [program](https://github.com/rajeevbrahma/temprepo/blob/master/get.sh) to get the 
+Step 10 : Now goto the repository root folder and run the following [get.sh](https://github.com/rajeevbrahma/temprepo/blob/master/get.sh) to get the 
+
+	run the following command 
+
+		sh get.sh
 
 		rpcuser
 		rpcport
