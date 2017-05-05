@@ -60,10 +60,16 @@ Step 4 : clone the [repo](https://github.com/rajeevbrahma/temprepo.git) in three
 Step 5 : Choose the farmland contianer as the admin by starting the chain in the farmland container
 
 Step 5.1 : run the command "multichain-util create chain1" in the farmland container.
+
+	multichain-util create chain1
+
 ![alt-tag](https://github.com/rajeevbrahma/temprepo/blob/master/screenshots/d8.png)
  
 ![alt-tag](https://github.com/rajeevbrahma/temprepo/blob/master/screenshots/d9.png)
 Step 5.2 : run the command "multichaind chain1 -daemon"
+
+	multichaind chain1 -daemon
+
 ![alt-tag](https://github.com/rajeevbrahma/temprepo/blob/master/screenshots/d10.png)
 
 ![alt-tag](https://github.com/rajeevbrahma/temprepo/blob/master/screenshots/d11.png)
@@ -111,6 +117,8 @@ Now permissions are granted for the warehouse and retailstore containers.
 
 
 Step 8 : Now we have to start the chain from the warehouse and retailstore containers.
+
+	multichaind chain1 -daemon
 
 ![alt-tag](https://github.com/rajeevbrahma/temprepo/blob/master/screenshots/d20.png)
 
