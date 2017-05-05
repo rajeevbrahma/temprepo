@@ -206,10 +206,10 @@ class Warehouse:
                     # Getting the node address
                     assetaddress = self.mchain.accountAddress()
                     # Updating the custom fields - meta data regarding the asset
-                    assetcustomfield =convertasset_details[0]["details"] 
-                    assetcustomfield.update({"origin":"farmland","owner":"John-Distributor","asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"}) 
+                    assetcustomfield =convertasset_details[0]["details"]  
+                    assetcustomfield.update({"assetmetrics":"packets","origin":"farmland","owner":"John-Distributor","asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"}) 
                     issueWHasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
-                    assetdescription = {"assetname":convertedasset_name,"assetquantity":assetquantity,"assetmetrics":"dollars","assetowner":"John-Distributor"}
+                    assetdescription = {"assetname":convertedasset_name,"assetquantity":assetquantity,"assetmetrics":"packets","assetowner":"John-Distributor"}
 
                     message = {"op_return":issueWHasset_return,"assetdescription":assetdescription}
                     print message
