@@ -105,7 +105,7 @@ class Warehouse:
             # Here asset will be a dictionary ex: {"asset1":1}
             # Assets involving in the exchange process
             ownasset = {"warehouse-crop":4} # offering asset
-            otherasset = {"retailmoney":50} # asking asset
+            otherasset = {"retailmoney":200} # asking asset
             # Step 1 - Locking the asset quantity that is for the exchange process
             prepare_return = self.mchain.preparelockunspentexchange(ownasset)
             print prepare_return
@@ -207,9 +207,9 @@ class Warehouse:
                     assetaddress = self.mchain.accountAddress()
                     # Updating the custom fields - meta data regarding the asset
                     assetcustomfield =convertasset_details[0]["details"]  
-                    assetcustomfield.update({"assetmetrics":"packets","origin":"farmland","owner":"John-Distributor","asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"}) 
+                    assetcustomfield.update({"assetmetrics":"packet(5 Kg)","origin":"farmland","owner":"John-Distributor","asset-arrivaldate":'2017-05-07',"asset-departuredate":'2017-05-10',"assetstorageconditions":"Good"}) 
                     issueWHasset_return = self.mchain.issueAsset(assetaddress,assetdetails,assetquantity,assetunit,assetnativeamount,assetcustomfield)
-                    assetdescription = {"assetname":convertedasset_name,"assetquantity":assetquantity,"assetmetrics":"packets","assetowner":"John-Distributor"}
+                    assetdescription = {"assetname":convertedasset_name,"assetquantity":assetquantity,"assetmetrics":"packet(5 kg)","assetowner":"John-Distributor"}
 
                     message = {"op_return":issueWHasset_return,"assetdescription":assetdescription}
                     print message

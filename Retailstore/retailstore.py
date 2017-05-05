@@ -103,7 +103,7 @@ class Retailstore:
         try:
             # The following will give the details regarding the exchange
 
-            ownasset = {"retailmoney":50} #asked asset 
+            ownasset = {"retailmoney":200} #asked asset 
             otherasset = {"warehouse-crop":4} # offered asset
 
             # --step1 decode the hexblob you got in the createexchange procedure
