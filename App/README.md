@@ -2,12 +2,12 @@
 
 ## To Run the demo
 
-### step 1:
+### Step 1:
 Open the UI file in a browser
 
         App/blockchainui.html
 
-### step 2: IssueAsset procedure
+### Step 2: IssueAsset procedure
 
     1.Click on the radio button under IssueAsset heading to issue FARMLAND asset
     2.Click on the radio button under IssueAsset heading to issue WAREHOUSE asset
@@ -15,39 +15,45 @@ Open the UI file in a browser
 
 On successful asset creation , farm / warehouse / retailstore icon turns to GREEN 
 
-### step 3: Create Exchange procedure (FARMLAND-WAREHOUSE)
+### Step 3: Create Exchange procedure (FARMLAND-WAREHOUSE)
 
     Click on the radio button under Create Exchange heading to issue FARMLAND-WAREHOUSE asset
     
 On successful Exchange creation , FARMLAND-WAREHOUSE / WAREHOUSE-RETAILSTORE arrow icon turns to ORANGE 
 
-### step 4: Decode Exchange procedure (FARMLAND-WAREHOUSE)
+### Step 4: Decode Exchange procedure (FARMLAND-WAREHOUSE)
 
     Click on the radio button under Decode Exchange heading to issue FARMLAND-WAREHOUSE asset
     
 On successful Decode Exchange creation , FARMLAND-WAREHOUSE / WAREHOUSE-RETAILSTORE arrow icon turns to GREEN 
 
-### step 5: Asset Processing
+### Step 5: Getting updated asset balances
+    
+    Click on the "Get Updated Bal" button under Asset Processing heading to get the upated balances of each asset
+    
+### Step 6: Asset Processing
 
     Click on the AssetProcess button under Asset Processing heading to process 
     the raw farmland asset to processed warehouse asset.
 
-### step 6: Create Exchange procedure (WAREHOUSE-RETAILSTORE)
+### Step 7: Create Exchange procedure (WAREHOUSE-RETAILSTORE)
 
     Click on the radio button under Create Exchange heading to issue WAREHOUSE-RETAILSTORE asset
     
 On successful Exchange creation , WAREHOUSE-RETAILSTORE arrow icon turns to ORANGE 
 
-### step 7: Decode Exchange procedure (WAREHOUSE-RETAILSTORE)
+### Step 8: Decode Exchange procedure (WAREHOUSE-RETAILSTORE)
 
     Click on the radio button under Decode Exchange heading to issue WAREHOUSE-RETAILSTORE asset
     
 On successful Decode Exchange creation , WAREHOUSE-RETAILSTORE arrow icon turns to GREEN
 
-### step 8: Getting updated asset balances
+### Step 9: Getting updated asset balances
     
     Click on the "Get Updated Bal" button under Asset Processing heading to get the upated balances of each asset
     
-### step 9: Delete chain
-To delete the chain , execute this file
+### Step 10: Delete chain
+To delete the chain , execute [this](https://github.com/rajeevbrahma/temprepo/blob/master/deletechain.sh) file in the root directory of this repository
+
+        sh deletechain.sh
     
