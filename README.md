@@ -8,13 +8,13 @@ Step 1.1 : Copy to the home folder and load the docker by running the following 
 		
 ![alt-tag](https://github.com/rajeevbrahma/temprepo/blob/master/screenshots/d29.png)
 
-![alt-tag](https://github.com/rajeevbrahma/temprepo/blob/master/screenshots/30.png)		
+![alt-tag](https://github.com/rajeevbrahma/temprepo/blob/master/screenshots/d30.png)		
 
 Step 1.2 : Run the following command to check installed image.
 		
 		sudo docker images
 
-![alt-tag](https://github.com/rajeevbrahma/temprepo/blob/master/screenshots/31.png)		
+![alt-tag](https://github.com/rajeevbrahma/temprepo/blob/master/screenshots/d31.png)		
 
 Note : This docker image has the following things installed.
 		
