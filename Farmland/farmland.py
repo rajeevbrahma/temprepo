@@ -158,7 +158,7 @@ class Farmland:
 			    print updateassetbalances_list
 			    message = {"op_return":updateassetbalances_list}
 			else:                
-			    message = {"op_return":"error","message":e}
+			    message = {"op_return":"error","message":""}
 			# publishing the message to the UI. 
 			publish_handler({"node":"farmland","messagecode":"updateassetbalance","messagetype":"resp","message":message})
 		except Exception as e:

@@ -274,7 +274,7 @@ class Warehouse:
                 print updateassetbalances_list
                 message = {"op_return":updateassetbalances_list}
             else:                
-                message = {"op_return":"error","message":e}
+                message = {"op_return":"error","message":""}
             # publish the message to the UI
             publish_handler({"node":"warehouse","messagecode":"updateassetbalance","messagetype":"resp","message":message})                        
         except Exception as e:
